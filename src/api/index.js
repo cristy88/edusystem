@@ -94,3 +94,20 @@ export const paperCreateApi = () =>{
   return axios.post('/exam/create')
 }
 
+
+// 修改用户信息
+export const updateInfoApi = ({username, password, sex, age, email, avatar}) => {
+  axios.post('user/update/info', {
+    username,
+    password,
+    sex,
+    age,
+    email,
+    avatar
+  })
+}
+
+// 查询左侧菜单
+export const getLeftMeauApi = () => {
+  return axios.get('/user/menulist')
+}
