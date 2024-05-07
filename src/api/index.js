@@ -88,3 +88,9 @@ export const toAvatarApi = ({avatar}) => {
     avatar
   })
 }
+
+//创建试卷
+export const paperCreateApi = () =>{
+  return axios.post('/exam/create')
+}
+
