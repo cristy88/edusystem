@@ -10,16 +10,59 @@ const leftMenu = [
     "label": "系统管理",
     "path": "/userManage",
     "disabled": false,
-    "createTime": 1682049168046,
     "__v": 0,
-    "isBtn": false,
     "icon": <CrownOutlined />,
     "children": [
+      {
+        key: "1321323",
+        label: "用户管理",
+        pid: "1321323",
+        path: '/userManage/manage-page'
+      },
       {
         "key": "64464e3f0d97d455218c012a",
         "label": "个人信息",
         "pid": "64420890551cb461cc300fcd",
         "path": "/userManage/personal",
+        "disabled": false,
+        "__v": 0
+      },
+      {
+        key: "21w2e23",
+        label: "用户",
+        path: "/userManage/userOptions"
+      }
+    ]
+  },
+  {
+    "key": "64420959551cb461cc30102d",
+    "label": "试题管理",
+    "path": "/question",
+    "disabled": false,
+    "__v": 0,
+    "icon": <SnippetsOutlined />,
+    "children": [
+      {
+        "key": "64463a301a553602aebcc716",
+        "label": "创建科目",
+        "pid": "64420959551cb461cc30102d",
+        "path": "/question/createsubject",
+        "disabled": false,
+        "__v": 0
+      },
+      {
+        "key": "64463a301a553602",
+        "label": "试题库",
+        "pid": "64420959551cb461cc30102d",
+        "path": "/question/questionbank",
+        "disabled": false,
+        "__v": 0
+      },
+      {
+        "key": "64463a301a5",
+        "label": "添加试题",
+        "pid": "64420959551cb461cc30102d",
+        "path": "/question/addquestion",
         "disabled": false,
         "__v": 0
       }

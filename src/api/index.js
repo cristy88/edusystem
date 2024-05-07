@@ -50,7 +50,7 @@ export const exitLoginApi = ({username, password, code}) => {
 
 // 创建用户
 export const createUserApi = ({username, password, status}) => {
-  axios.post('/user/create', {
+  return axios.post('/user/create', {
     username,
     password,
     status
@@ -58,20 +58,25 @@ export const createUserApi = ({username, password, status}) => {
 }
 
 // 查询用户列表
-export const selUserListApi = () => {
-  return axios.get('/user/list')
+export const selUserListApi = (page = 1, pagesize = 100) => {
+  return axios.get('/user/list', {
+    params: {
+      page,
+      pagesize
+    }
+  })
 }
 
 // 编辑用户
 export const updateUserApi = ({id, username}) => {
-  axios.post('/user/update',{
+  return axios.post('/user/update',{
     id,
     username
   })
 }
 
 // 删除用户
-export const deleteUserApi = ({id}) => {
+export const deleteUserApi = (id) => {
   return axios.post('/user/remove', {
     id
   })
@@ -83,7 +88,7 @@ export const getPersonInfoApi = () => {
 }
 
 // 上传头像
-export const toAvatarApi = ({avatar}) => {
+export const toAvatarApi = (avatar) => {
   return axios.post('/profile', {
     avatar
   })
@@ -91,7 +96,7 @@ export const toAvatarApi = ({avatar}) => {
 
 // 修改用户信息
 export const updateInfoApi = ({username, password, sex, age, email, avatar}) => {
-  axios.post('user/update/info', {
+  return axios.post('user/update/info', {
     username,
     password,
     sex,
