@@ -110,3 +110,41 @@ export const updateInfoApi = ({username, password, sex, age, email, avatar}) => 
 export const getLeftMeauApi = () => {
   return axios.get('/user/menulist')
 }
+
+// 创建考试
+export const examinationApi = ({studentname, classify, examId, group, examiner, startTime, endTime}) => {
+  return axios.post('/examination/create', {
+    studentname,
+    classify,
+    examId,
+    group,
+    examiner,
+    startTime,
+    endTime
+  })
+}
+
+// 查询考试列表
+export const getExaninationListApi = () => {
+  return axios.get('/examination/list?page=1&pagesize=2', {
+    header: 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Mzc3NGE3M2JmYzFkZGE1ZDhiZGZjMiIsImlhdCI6MTY4MTM1Nzc4OH0.UNcnEu_Y8F-1XCBUOA-j5VkynKe5uh6Vmum_51EbsxU' 
+  })
+}
+
+// 编辑考试
+export const examinationUpdateApi = ({id, name}) => {
+  return axios.post('/examination/update', {
+    id,
+    name
+  })
+}
+
+// 删除考试
+export const examinationRemoveApi = ({id}) => {
+  return axios.post('/examination/remove', {id})
+}
+
+// 查询考试详情
+export const getExaminationDetailApi = (id) => {
+  return axios.get(`/examination/detail?id=${id}`)
+}
