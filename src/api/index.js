@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'https://zyxcl.xyz/exam_api'
+axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
 
 // 添加请求拦截器

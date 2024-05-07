@@ -21,5 +21,6 @@ module.exports = {
     'indent': ['error', 2],  // 强制使用2个空格进行缩进
     'space-infix-ops': 'error',  // 要求运算符周围必须有空格，例如 x = y 而非 x=y
     'key-spacing': ['error', { 'afterColon': true }],  // 键和冒号之间必须有空格
+    'no-unused-vars': 'off',
   },
 }
