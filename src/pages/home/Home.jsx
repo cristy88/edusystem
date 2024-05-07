@@ -26,7 +26,6 @@ const Home = () => {
         </div>
         <div className={style.rightCon}>
           <Outlet />
-          <Outlet />
         </div>
       </div>
     </div>
