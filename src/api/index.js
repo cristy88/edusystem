@@ -88,3 +88,66 @@ export const toAvatarApi = ({avatar}) => {
     avatar
   })
 }
+
+// 创建班级
+export const createClass = ({name, classify, teacher, students}) => {
+  return axios.post('/studentGroup/create', {
+    name,
+    classify,
+    teacher,
+    students
+  })
+}
+
+// 查询班级
+export const queryClass = () => {
+  return axios.post('/studentGroup/list')
+}
+
+// 编辑班级
+export const redactClass = ({id, name}) => {
+  return axios.post('/studentGroup/update', {
+    id,
+    name
+  })
+}
+
+// 删除班级
+export const deleteClass = ({id}) => {
+  return axios.post('/studentGroup/remove', {
+    id
+  })
+}
+
+// 创建学生
+export const createStudent = ({
+  username, password, sex, age, className, status}) => {
+  return axios.post('/student/create', {
+    username, 
+    password, 
+    sex, 
+    age, 
+    className, 
+    status
+  })
+}
+
+// 查询学生
+export const queryStudent = () => {
+  return axios.post('/student/list')
+}
+
+// 编辑学生
+export const redactStudent = ({id, name}) => {
+  return axios.post('/student/update', {
+    id,
+    name
+  })
+}
+
+// 删除班级
+export const deleteStudent = ({id}) => {
+  return axios.post('/student/remove', {
+    id
+  })
+}
