@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import style from './Home.module.scss'
 import HomeLeft from '../../components/homeLeft'
+import { Outlet } from 'react-router-dom'
 
 const Home = () => {
   return (
@@ -11,7 +12,7 @@ const Home = () => {
           <HomeLeft />
         </div>
         <div className={style.rightCon}>
-
+          <Outlet />
         </div>
       </div>
     </div>
