@@ -19,7 +19,7 @@ const Login = () => {
   }
 
   const onFinish = async (values) => {
-    console.log('Success', values)
+    // console.log('Success', values)
     try {
       const res = await toLoginApi(values)
       console.log(res)
@@ -30,11 +30,11 @@ const Login = () => {
         })
         getCode()
       } else {
-        console.log('登陆成功')
+        console.log('登录成功')
         navigate('/')
       }
     } catch (e) {
-      console.log('登陆出错', e)
+      console.log('登录出错', e)
     }
   }
 
