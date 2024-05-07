@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import style from './login.module.scss'
-import { Button, Checkbox, Form, Input, Col, Row, message } from "antd"
+import { Button, Form, Input, Col, Row, message } from "antd"
 import { getCodeApi, toLoginApi } from '../../api'
 import { useNavigate } from 'react-router-dom'
 

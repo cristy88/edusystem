@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 axios.defaults.baseURL = 'https://zyxcl.xyz/exam_api'
+axios.defaults.withCredentials = true
 
 // 登录
 export const toLoginApi = ({username, password, code}) => {
