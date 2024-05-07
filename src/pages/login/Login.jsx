@@ -30,8 +30,14 @@ const Login = () => {
         })
         getCode()
       } else {
-        console.log('登录成功')
-        navigate('/')
+        messageApi.open({
+          type: 'success',
+          content: '登录成功',
+        })
+        localStorage.setItem('token', res.data.data.token)
+        setTimeout(() => {
+          navigate('/')
+        }, 300)
       }
     } catch (e) {
       console.log('登录出错', e)
