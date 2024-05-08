@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { selUserListApi, createUserApi, updateUserApi, deleteUserApi, getRoleApi } from '../../../../api'
 import style from '../UserManage.module.scss'
 import { Table, Button, Space, Image, Switch, Popconfirm, message, Modal, Select, Form } from 'antd'
-
+import ChangeUser from '../components/changeUserTable/ChangeUser'
+const { Option } = Select
 const isLR = [
   {'name': '头像', 'nickname': 'avator'},
   {'nickname': 'status', 'name': '是否禁用'},
@@ -22,20 +23,14 @@ const UserManageUser = () => {
   const [pagesize, setPagesize] = useState(10)
   const columns = useRef([])
   const [allroles, setAllRoles] = useState([])
-  const [vals, setVals] = useState([]) //每个人的角色
-  const [form] = Form.useForm()
-
+  const [FormRef] = Form.useForm()
+  
   const getAllRole = async () => {
     const res = await getRoleApi()
     console.log('获取角色', res.data.data.list)
     const trueRes = res.data.data.list
-    const opts = trueRes.map(v => {
-      return {
-        label: v.name,
-        value: v.value
-      }
-    })
-    setAllRoles(opts)
+    setAllRoles(() => res.data.data.list)
+    FormRef.setFieldsValue({role: trueRes.map(item => item.value)})
   }
 
   // 获得用户列表
@@ -127,38 +122,52 @@ const UserManageUser = () => {
     console.log('取消删除')
   }
 
-  const handleChange = (value) => {
-    console.log('选择', value)
-    setVals(() => [...vals,...value])
+  // 用户添加角色提交表单
+  const handleRoleFormSubmit = (id) => {
+    FormRef.validateFields()
+      .then(values => {
+        console.log('提交表单', values)
+        updateUser({id, ...values})
+      })
+      .catch(info => {
+        console.log(info)
+      })
   }
 
   const roleModal = (id, role) => {
     console.log('点击分配角色', role)
-    console.log('点击之后所有角色', allroles)
-    // setVals(() => [])
+    console.log('所有角色', allroles)
+    // let trueRole = allroles.filter(v => role.find(r => r === v.value))
+    // trueRole = trueRole.map(v => v.name)
+    // console.log(trueRole)
+    getAllRole()
     Modal.confirm({
       title: '分配角色',
       content: (
-        <Form form={form}>
-          <Form.Item>
+        <Form form={FormRef} initialValues={role} >
+          <Form.Item name="role" >
             <Select
               mode="multiple"
               allowClear
               style={{
                 width: '100%',
               }}
-              defaultValue={role}
-              onChange={handleChange}
               options={allroles}
-            />
+            >
+              {allroles.map((rol, index) => (
+                <Option key={rol['_id']} value={rol.value}>
+                  {rol.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       ),
       okText: '确认',
       cancelText: '取消',
       onOk() {
-        console.log('确定', form)
-        // updateUser({id, role: vals})
+        console.log('确定')
+        handleRoleFormSubmit(id)
       }
     })
   }
@@ -167,9 +176,13 @@ const UserManageUser = () => {
     getUserList(page, pagesize)
   }, [page, pagesize])
 
+  useLayoutEffect(() => {
+    getAllRole()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // 列表的列
   useEffect(() => {
-    getAllRole()
     columns.current = isLR.map((v, ind) => {
       const obj = {}
       if (ind === 0) {
