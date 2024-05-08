@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import style from './HomeLeft.module.scss'
-import { MenuUnfoldOutlined, MenuFoldOutlined, CrownOutlined, TeamOutlined, SnippetsOutlined, FileUnknownOutlined, FormOutlined } from '@ant-design/icons'
+import { MenuUnfoldOutlined, MenuFoldOutlined, CrownOutlined, TeamOutlined, SnippetsOutlined, FileUnknownOutlined, FormOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
@@ -99,6 +99,32 @@ const leftMenu = [
         "path": "/examination/detail",
         "disabled": false,
         "__v": 0,
+      }
+    ]
+  },
+  {
+    "key": "64420890551cb461cc300fcc",
+    "label": "班级管理",
+    "path": "/studentGroup",
+    "disabled": false,
+    "__v": 0,
+    "icon": <TeamOutlined />,
+    "children": [
+      {
+        "key": "64464e3f0d97d455218c0122",
+        "label": "班级列表",
+        "pid": "64420890551cb461cc300fcd",
+        "path": "/studentGroup",
+        "disabled": false,
+        "__v": 0
+      },
+      {
+        "key": "64464e3f0d97d455218c0120",
+        "label": "学生列表",
+        "pid": "64420890551cb461cc300fcd",
+        "path": "/student",
+        "disabled": false,
+        "__v": 0
       }
     ]
   }

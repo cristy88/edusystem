@@ -1,7 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react'
+import { Children } from "react"
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
+
+import Student from '../pages/student/Student'
+import StudentGroup from '../pages/studentGroup/StudentGroup'
 import { Navigate } from 'react-router-dom'
 import Question from '../pages/home/question/Question'
 import UserManage from '../pages/home/userManage/UserManage'
@@ -92,5 +96,13 @@ export const routes = [
   {
     path: '/login',
     element: <Login></Login>
+  },
+  {
+    path: '/studentGroup',
+    element: <StudentGroup></StudentGroup>
+  },
+  {
+    path: '/student',
+    element: <Student></Student>
   }
 ]
