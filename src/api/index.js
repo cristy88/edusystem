@@ -50,7 +50,7 @@ export const exitLoginApi = ({username, password, code}) => {
 
 // 创建用户
 export const createUserApi = ({username, password, status}) => {
-  axios.post('/user/create', {
+  return axios.post('/user/create', {
     username,
     password,
     status
@@ -58,20 +58,25 @@ export const createUserApi = ({username, password, status}) => {
 }
 
 // 查询用户列表
-export const selUserListApi = () => {
-  return axios.get('/user/list')
+export const selUserListApi = (page = 1, pagesize = 100) => {
+  return axios.get('/user/list', {
+    params: {
+      page,
+      pagesize
+    }
+  })
 }
 
 // 编辑用户
 export const updateUserApi = ({id, username}) => {
-  axios.post('/user/update',{
+  return axios.post('/user/update',{
     id,
     username
   })
 }
 
 // 删除用户
-export const deleteUserApi = ({id}) => {
+export const deleteUserApi = (id) => {
   return axios.post('/user/remove', {
     id
   })
@@ -83,7 +88,7 @@ export const getPersonInfoApi = () => {
 }
 
 // 上传头像
-export const toAvatarApi = ({avatar}) => {
+export const toAvatarApi = (avatar) => {
   return axios.post('/profile', {
     avatar
   })
@@ -91,7 +96,7 @@ export const toAvatarApi = ({avatar}) => {
 
 // 修改用户信息
 export const updateInfoApi = ({username, password, sex, age, email, avatar}) => {
-  axios.post('user/update/info', {
+  return axios.post('user/update/info', {
     username,
     password,
     sex,
@@ -104,4 +109,42 @@ export const updateInfoApi = ({username, password, sex, age, email, avatar}) => 
 // 查询左侧菜单
 export const getLeftMeauApi = () => {
   return axios.get('/user/menulist')
+}
+
+// 创建考试
+export const examinationApi = ({studentname, classify, examId, group, examiner, startTime, endTime}) => {
+  return axios.post('/examination/create', {
+    studentname,
+    classify,
+    examId,
+    group,
+    examiner,
+    startTime,
+    endTime
+  })
+}
+
+// 查询考试列表
+export const getExaninationListApi = () => {
+  return axios.get('/examination/list?page=1&pagesize=2', {
+    header: 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Mzc3NGE3M2JmYzFkZGE1ZDhiZGZjMiIsImlhdCI6MTY4MTM1Nzc4OH0.UNcnEu_Y8F-1XCBUOA-j5VkynKe5uh6Vmum_51EbsxU' 
+  })
+}
+
+// 编辑考试
+export const examinationUpdateApi = ({id, name}) => {
+  return axios.post('/examination/update', {
+    id,
+    name
+  })
+}
+
+// 删除考试
+export const examinationRemoveApi = ({id}) => {
+  return axios.post('/examination/remove', {id})
+}
+
+// 查询考试详情
+export const getExaminationDetailApi = (id) => {
+  return axios.get(`/examination/detail?id=${id}`)
 }
