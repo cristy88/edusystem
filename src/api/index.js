@@ -94,6 +94,12 @@ export const toAvatarApi = (avatar) => {
   })
 }
 
+//创建试卷
+export const paperCreateApi = () =>{
+  return axios.post('/exam/create')
+}
+
+
 // 修改用户信息
 export const updateInfoApi = ({username, password, sex, age, email, avatar}) => {
   return axios.post('user/update/info', {

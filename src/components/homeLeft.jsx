@@ -127,7 +127,33 @@ const leftMenu = [
         "__v": 0
       }
     ]
-  }
+  },
+  {
+    "key": "05072253paper",
+    "label": "试卷管理",
+    "path": "/paper",
+    "disabled": false,
+    "__v": 0,
+    "icon": <TeamOutlined />,
+    "children": [
+      {
+        "key": "05072253papercreate",
+        "label": "创建试卷",
+        "pid": "paper001",
+        "path": "/paper/paperCreate",
+        "disabled": false,
+        "__v": 0,
+      },
+      {
+        "key": "05072253papermerge",
+        "label": "试卷管理",
+        "pid": "paper002",
+        "path": "/paper/paperManage",
+        "disabled": false,
+        "__v": 0,
+      }
+    ]
+  },
 ]
 
 const HomeLeft = () => {
