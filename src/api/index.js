@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { message } from 'antd'
 
 axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
@@ -22,6 +23,12 @@ axios.interceptors.response.use(function (response) {
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
   console.log('响应错误', error)
+  if (error.response.status === 401) {
+    message.error('登录信息失效，请重新登录')
+    window.location.assign('/login')
+    return Promise.reject(new Error('登录信息失效'))
+  }
+  message.error('错误码' + error.response.status)
   return Promise.reject(error)
 })
 
@@ -68,11 +75,8 @@ export const selUserListApi = (page = 1, pagesize = 100) => {
 }
 
 // 编辑用户
-export const updateUserApi = ({id, username}) => {
-  return axios.post('/user/update',{
-    id,
-    username
-  })
+export const updateUserApi = (UserObj) => {
+  return axios.post('/user/update',UserObj)
 }
 
 // 删除用户
@@ -109,4 +113,9 @@ export const updateInfoApi = ({username, password, sex, age, email, avatar}) => 
 // 查询左侧菜单
 export const getLeftMeauApi = () => {
   return axios.get('/user/menulist')
+}
+
+// 查询角色
+export const getRoleApi = () => {
+  return axios.get('/role/list')
 }
