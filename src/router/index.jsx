@@ -1,3 +1,4 @@
+import { Children } from "react"
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 import PaperCreate from "../pages/paper/paperCreate/PaperCreate"
@@ -14,7 +15,7 @@ export const routes = [
   },
   {
     path: '/paper/paperCreate',
-    element: <PaperCreate></PaperCreate>
+    element: <PaperCreate></PaperCreate>,
   },
   {
     path: '/paper/paperManage',

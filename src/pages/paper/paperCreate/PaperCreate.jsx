@@ -1,24 +1,88 @@
 import React,{useState} from 'react'
 import style from './paperCreate.module.scss'
-import { Button, message, Steps, theme } from 'antd'
+import { Button, message, Steps, theme , Form, Input ,Select,InputNumber} from 'antd'
 
-const steps = [
-  {
-    title: '试卷基础信息',
-    content: 'First-content',
-  },
-  {
-    title: '选择试卷的方式&科目',
-    content: 'Second-content',
-  },
-  {
-    title: '展示试卷基本信息',
-    content: 'Last-content',
-  },
-]
+
 
 const PaperCreate = () => {
-  const { token } = theme.useToken()
+  const steps = [
+    {
+      title: '试卷基础信息',
+      content:
+       <div className={style.first}>
+         <Form className={style.form}  layout="vertical" autoComplete="off">
+           <Form.Item
+             className={style.papername}
+             name="paper-name" 
+             label="试卷名称" 
+             labelWrap= 'true'
+             rules={[
+               {
+                 required: true,
+               },
+             ]}>
+             <Input placeholder='请填写试卷名称' />
+           </Form.Item>
+           <Form.Item
+             name="paper-remark" 
+             label="备注" 
+           >
+             <Input.TextArea placeholder='请填写备注' rows={6} />
+           </Form.Item>
+         </Form>
+  
+       </div>,
+    },
+    {
+      title: '选择试卷的方式&科目',
+      content: 
+        <div className={style.second}> 
+          <Form className={style.form}  layout="vertical" autoComplete="off">
+            <Form.Item
+              className={style.papername}
+              name="paper-subject" 
+              label="考试科目" 
+              rules={[
+                {
+                  required: true,
+                },
+              ]}>
+              <Select
+                mode="tags"
+                style={{
+                  width: '100%',
+                }}
+                placeholder="Tags Mode"
+                // onChange={handleChange}
+                // options={options}
+              />
+            </Form.Item>
+            <Form.Item
+              name="paper-count" 
+              label="试卷数量" 
+            >
+              <InputNumber min={0}  defaultValue={0}  />
+            </Form.Item>
+          </Form>
+        </div>,
+    },
+    {
+      title: '展示试卷基本信息',
+      content: 
+      <div className={style.third}> 
+        <h3>试卷信息</h3>
+        <div className={style.paperInfo}>
+          <div className=''>试卷名称：</div>
+          <div>试卷科目：</div>
+          <div>备注：</div>
+        </div>
+      </div>,
+    },
+  ]
+
+
+  const [paperName,setPaperName] = useState('')
+  const [paperRemark,setPaperRemark] = useState('')
   const [current, setCurrent] = useState(0)
   const next = () => {
     setCurrent(current + 1)
@@ -30,22 +94,17 @@ const PaperCreate = () => {
     key: item.title,
     title: item.title,
   }))
-  const contentStyle = {
-    lineHeight: '260px',
-    textAlign: 'center',
-    color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
-    borderRadius: token.borderRadiusLG,
-    border: `1px dashed ${token.colorBorder}`,
-    marginTop: 16,
-    width: 800
+  
+  const changeName = (e) => {
+    setPaperName(e.target.value)
   }
+
 
   return (
     <div className={style.paperCreate}>
       <div className={style.body}>
         <Steps current={current} items={items} className={style.header}/>
-        <div style={contentStyle}>{steps[current].content}</div>
+        <div className={style.content} >{steps[current].content}</div>
         <div
           style={{
             marginTop: 24,
@@ -53,12 +112,12 @@ const PaperCreate = () => {
         >
           {current < steps.length - 1 && (
             <Button type="primary" onClick={() => next()}>
-              Next
+              下一步
             </Button>
           )}
           {current === steps.length - 1 && (
             <Button type="primary" onClick={() => message.success('Processing complete!')}>
-              Done
+              完成
             </Button>
           )}
           {current > 0 && (
@@ -68,7 +127,7 @@ const PaperCreate = () => {
               }}
               onClick={() => prev()}
             >
-              Previous
+              上一步
             </Button>
           )}
         </div>
