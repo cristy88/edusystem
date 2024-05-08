@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react'
+import { Children } from "react"
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 import { Navigate } from 'react-router-dom'
@@ -19,6 +20,8 @@ const UserManaPerson = lazy(() => import('../pages/home/userManage/userManagePer
 const ExaminationCreate = lazy(() => import(/* webpackChunkName: "examination" */ '../pages/home/examination/create/Create'))
 const ExaminationList = lazy(() => import(/* webpackChunkName: "examinationList" */ '../pages/home/examination/list/List'))
 const ExaminationDetail = lazy(() => import(/* webpackChunkName: "examinationDetail" */ '../pages/home/examination/detail/Detail'))
+import PaperCreate from "../pages/paper/paperCreate/PaperCreate"
+import PaperManage from "../pages/paper/paperManage/PaperManage"
 
 export const routes = [
   {
@@ -92,5 +95,13 @@ export const routes = [
   {
     path: '/login',
     element: <Login></Login>
-  }
+  },
+  {
+    path: '/paper/paperCreate',
+    element: <PaperCreate></PaperCreate>,
+  },
+  {
+    path: '/paper/paperManage',
+    element: <PaperManage></PaperManage>
+  },
 ]
