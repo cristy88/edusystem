@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
-import paperReducer from "./paperInfo/paperInfo"
+import userStore from './modules/user'
 
 const store = configureStore({
   reducer: {
-    paper: paperReducer
-  }
+    user: userStore
+  },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({
+    //关闭redux序列化检测
+    serializableCheck: false
+  })
 })
 
 export default store

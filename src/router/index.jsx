@@ -59,18 +59,18 @@ export const routes = [
         children: [
           {
             path: '/question',
-            element: <Navigate to="/question/addquestion" />
+            element: <Navigate to="/question/create-item" />
           },
           {
-            path: '/question/addquestion',
+            path: '/question/create-item',
             element: <AddQuestion />
           },
           {
-            path: '/question/questionbank',
+            path: '/question/item-bank',
             element: <QuestionBank />
           },
           {
-            path: '/question/createsubject',
+            path: '/question/create-subject',
             element: <CreateSubject />
           }
         ]

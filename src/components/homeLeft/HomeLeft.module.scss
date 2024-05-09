@@ -1,6 +1,8 @@
 .aside {
-  width: 256px;
+  max-width: 256px;
   height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .btn {

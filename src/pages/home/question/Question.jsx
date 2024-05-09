@@ -10,7 +10,7 @@ const Question = () => {
         试卷
       </div>
       <div className={style.bottom}>
-        <Suspense fallback={<div style={{width: '200px', margin: '10px auto 0'}}><Spin tip="Loading" size="large"></Spin></div>} >
+        <Suspense fallback={<div style={{width: '200px', margin: '10px auto 0'}}><Spin size="large"></Spin></div>} >
           <Outlet />
         </Suspense>
       </div>
