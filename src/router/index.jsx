@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react'
 import { Children } from "react"
-import { Children } from "react"
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 
