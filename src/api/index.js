@@ -1,36 +1,5 @@
 import axios from 'axios'
-import { message } from 'antd'
-
-axios.defaults.baseURL = '/api'
-axios.defaults.withCredentials = true
-
-// 添加请求拦截器
-axios.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么
-  config.headers.Authorization = localStorage.getItem('token') || ''
-  return config
-}, function (error) {
-  // 对请求错误做些什么
-  return Promise.reject(error)
-})
-
-// 添加响应拦截器
-axios.interceptors.response.use(function (response) {
-  // 2xx 范围内的状态码都会触发该函数。
-  // 对响应数据做点什么
-  return response
-}, function (error) {
-  // 超出 2xx 范围的状态码都会触发该函数。
-  // 对响应错误做点什么
-  console.log('响应错误', error)
-  if (error.response.status === 401) {
-    message.error('登录信息失效，请重新登录')
-    window.location.assign('/login')
-    return Promise.reject(new Error('登录信息失效'))
-  }
-  message.error('错误码' + error.response.status)
-  return Promise.reject(error)
-})
+import './request.js'
 
 // 登录
 export const toLoginApi = ({username, password, code}) => {
@@ -99,15 +68,8 @@ export const toAvatarApi = (avatar) => {
 }
 
 // 修改用户信息
-export const updateInfoApi = ({username, password, sex, age, email, avatar}) => {
-  return axios.post('user/update/info', {
-    username,
-    password,
-    sex,
-    age,
-    email,
-    avatar
-  })
+export const updateInfoApi = (userObj) => {
+  return axios.post('user/update/info', userObj)
 }
 
 // 查询左侧菜单
