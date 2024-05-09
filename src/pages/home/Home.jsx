@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import style from './Home.module.scss'
-import HomeLeft from '../../components/HomeLeft'
+// import HomeLeft from '../../components/HomeLeft'
+import HomeLeft from '../../components/homeLeft'
 import { Outlet } from 'react-router-dom'
 import { getPersonInfoApi } from '../../api'
 

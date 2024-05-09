@@ -1,28 +1,22 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
 
 .paperCreate{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // background: #F0F2F5;
-    position: relative;
+    background: #F0F2F5;
 }
 .body{
-    margin-top: 200px;
     padding: 20px;
     background: #fff;
     .content{
+        // flex: 1;
         width: 800px;
-        height: 260px;
+        min-height: 300px;
         text-align: center;
         border-radius: 10px;
         margin-top: 16px;
-
+        
         margin-bottom: 20px;
     }
 }

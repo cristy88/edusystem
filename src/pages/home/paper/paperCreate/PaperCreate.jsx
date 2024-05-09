@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import style from './paperCreate.module.scss'
-import { Button, message, Steps, theme , Form, Input ,Select,InputNumber} from 'antd'
+import { Button, message, Steps, theme , Form, Input ,Select,InputNumber,} from 'antd'
 
 
 
@@ -40,7 +40,7 @@ const PaperCreate = () => {
           <Form className={style.form}  layout="vertical" autoComplete="off">
             <Form.Item
               className={style.papername}
-              name="paper-subject" 
+              name="paper-classify" 
               label="考试科目" 
               rules={[
                 {
@@ -57,12 +57,14 @@ const PaperCreate = () => {
                 // options={options}
               />
             </Form.Item>
-            <Form.Item
-              name="paper-count" 
-              label="试卷数量" 
-            >
-              <InputNumber min={0}  defaultValue={0}  />
-            </Form.Item>
+            {/* <div>
+              <ul>
+                {
+                  // eslint-disable-next-line react/jsx-key
+                  titles.map((item, index) => <li className={current === index ? "active" : ""} onClick={this.changeCurrent.bind(this,index)} key={item.id}>{item.title}</li>)
+                } 
+              </ul>
+            </div> */}
           </Form>
         </div>,
     },
@@ -79,6 +81,28 @@ const PaperCreate = () => {
       </div>,
     },
   ]
+
+  // const state = {
+  //   tab: [{id: 't1', title: '题库选题'},{id: 't2',title: '随机选题'}],
+  //   tabContents: [
+  //     { 
+  //       id: 'c1',
+  //       content: <div><Button type="primary">选择试题</Button></div>
+  //     },
+  //     {
+  //       id: 'c2',
+  //       content: 
+  //       <div>
+  //         <Form.Item name="questions-count" label="试题数量" >
+  //           <InputNumber min={0}  defaultValue={0}  />
+  //         </Form.Item>
+  //       </div>
+  //     }
+  //   ]
+  // }
+
+  // let titles = this.state.tab
+  // let contents = this.state.tabContents
 
 
   const [paperName,setPaperName] = useState('')

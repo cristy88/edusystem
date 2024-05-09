@@ -11,6 +11,7 @@ import { Navigate } from 'react-router-dom'
 import Question from '../pages/home/question/Question'
 import UserManage from '../pages/home/userManage/UserManage'
 import Examination from "../pages/home/examination/Examination"
+import PaperManage from '../pages/home/paper/PaperManage'
 
 const AddQuestion = lazy(() => import('../pages/home/question/addQuestion/AddQuetion'))
 const QuestionBank = lazy(() => import('../pages/home/question/questionBank/QuestionBank'))
@@ -24,8 +25,10 @@ const UserManaPerson = lazy(() => import('../pages/home/userManage/userManagePer
 const ExaminationCreate = lazy(() => import(/* webpackChunkName: "examination" */ '../pages/home/examination/create/Create'))
 const ExaminationList = lazy(() => import(/* webpackChunkName: "examinationList" */ '../pages/home/examination/list/List'))
 const ExaminationDetail = lazy(() => import(/* webpackChunkName: "examinationDetail" */ '../pages/home/examination/detail/Detail'))
-import PaperCreate from "../pages/paper/paperCreate/PaperCreate"
-import PaperManage from "../pages/paper/paperManage/PaperManage"
+
+const PaperCreate = lazy(()=> import(/* webpackChunkName: "paperCreate" */ "../pages/home/paper/paperCreate/PaperCreate"))
+const PaperLibrary = lazy(()=> import(/* webpackChunkName: "paperLibrary" */ '../pages/home/paper/paperLibrary/PaperLibrary'))
+
 
 export const routes = [
   {
@@ -93,6 +96,20 @@ export const routes = [
             element: <Suspense fallback={<div>加载中...</div>}><ExaminationDetail></ExaminationDetail></Suspense>
           }
         ]
+      },
+      {
+        path: '/paper',
+        element: <PaperManage />,
+        children: [
+          {
+            path: '/paper/paperCreate',
+            element: <Suspense fallback={<div>加载中...</div>}><PaperCreate /></Suspense>
+          },
+          {
+            path: '/paper/paperLibrary',
+            element: <Suspense fallback={<div>加载中...</div>}><PaperLibrary /></Suspense>         
+          },
+        ]
       }
     ]
   },
@@ -108,12 +125,5 @@ export const routes = [
     path: '/student',
     element: <Student></Student>
   },
-  {
-    path: '/paper/paperCreate',
-    element: <PaperCreate></PaperCreate>,
-  },
-  {
-    path: '/paper/paperManage',
-    element: <PaperManage></PaperManage>
-  },
+
 ]

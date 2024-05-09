@@ -145,10 +145,10 @@ const leftMenu = [
         "__v": 0,
       },
       {
-        "key": "05072253papermerge",
-        "label": "试卷管理",
+        "key": "05072253paperLibrary",
+        "label": "试库",
         "pid": "paper002",
-        "path": "/paper/paperManage",
+        "path": "/paper/paperLibrary",
         "disabled": false,
         "__v": 0,
       }
