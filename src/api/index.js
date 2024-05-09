@@ -78,6 +78,11 @@ export const updateInfoApi = (userObj) => {
   return axios.post('user/update/info', userObj)
 }
 
+// 查询角色
+export const getRoleApi = () => {
+  return axios.get('/role/list')
+}
+
 // 查询左侧菜单
 export const getLeftMeauApi = () => {
   return axios.get('/user/menulist')
