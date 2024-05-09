@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { lazy, Suspense } from 'react'
+import { lazy} from 'react'
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 import { Navigate } from 'react-router-dom'
@@ -75,15 +75,15 @@ export const routes = [
           },
           {
             path: '/examination/create',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationCreate></ExaminationCreate></Suspense>
+            element: <ExaminationCreate></ExaminationCreate>
           },
           {
             path: '/examination/list',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationList></ExaminationList></Suspense>
+            element: <ExaminationList></ExaminationList>
           },
           {
             path: '/examination/detail',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationDetail></ExaminationDetail></Suspense>
+            element: <ExaminationDetail></ExaminationDetail>
           }
         ]
       }

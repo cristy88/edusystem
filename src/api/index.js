@@ -126,13 +126,11 @@ export const examinationApi = ({studentname, classify, examId, group, examiner, 
 
 // 查询考试列表
 export const getExaninationListApi = () => {
-  return axios.get('/examination/list?page=1&pagesize=2', {
-    header: 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Mzc3NGE3M2JmYzFkZGE1ZDhiZGZjMiIsImlhdCI6MTY4MTM1Nzc4OH0.UNcnEu_Y8F-1XCBUOA-j5VkynKe5uh6Vmum_51EbsxU' 
-  })
+  return axios.get('/examination/list')
 }
 
 // 编辑考试
-export const examinationUpdateApi = ({id, name}) => {
+export const editExaminationApi = ({id, name}) => {
   return axios.post('/examination/update', {
     id,
     name
@@ -148,3 +146,38 @@ export const examinationRemoveApi = ({id}) => {
 export const getExaminationDetailApi = (id) => {
   return axios.get(`/examination/detail?id=${id}`)
 }
+
+// 创建科目
+export const createClassifyApi = ({name, value}) => {
+  return axios.post('/classify/create', {
+    name,
+    value
+  })
+}
+
+// 查询科目列表
+export const getClassifyListApi = () => {
+  return axios.get('classify/list?page=1&pagesize=10')
+}
+
+// 编辑科目
+export const editClassifyApi = ({id, name}) => {
+  return axios.post('/classify/update', {
+    id,
+    name
+  })
+}
+// 删除科目
+export const removeClassifyApi = ({id}) => {
+  return axios.post('/classify/remove', {id})
+}
+
+// 查询试卷列表
+export const getExamListApi = (() => {
+  return axios.get('/exam/list')
+})
+
+// 班级
+export const classApi = (() => {
+  return axios.get('studentGroup/list')
+})
