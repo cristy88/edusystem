@@ -100,7 +100,7 @@ export const createClass = ({name, classify, teacher, students}) => {
 
 // 查询班级
 export const queryClass = () => {
-  return axios.post('/studentGroup/list')
+  return axios.get('/studentGroup/list')
 }
 
 // 编辑班级

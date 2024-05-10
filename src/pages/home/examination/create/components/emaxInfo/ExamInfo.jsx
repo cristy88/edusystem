@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { queryClass, getClassifyListApi } from '../../../../../../api'
-import {
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Button
-} from 'antd'
+import { queryClass, getClassifyListApi, selUserListApi } from '../../../../../../api'
+import { Form, Input, DatePicker, Select, Button } from 'antd'
 
 // eslint-disable-next-line react/prop-types
 const ExamInfo = ({formVal}) => {
   
   const [grade, setGrade] = useState([])
+  const [examiner, setExaminer] = useState([])
   const [classify, setClassify] = useState([])
 
   const { RangePicker } = DatePicker
@@ -19,6 +14,12 @@ const ExamInfo = ({formVal}) => {
   const getClass = async () => {
     const res = await queryClass()
     setGrade(res.data.data.list)
+  }
+  
+  const getExaminer = async () => {
+    const res = await selUserListApi()
+    console.log(res)
+    setExaminer(res.data.data.list)
   }
 
   const getClassifyList = async () => {
@@ -28,6 +29,9 @@ const ExamInfo = ({formVal}) => {
 
   useEffect(() => {
     getClass()
+  }, [])
+  useEffect(() => {
+    getExaminer()
   }, [])
   useEffect(() => {
     getClassifyList()
@@ -102,8 +106,8 @@ const ExamInfo = ({formVal}) => {
         }}
       >
         <Select placeholder="请选择">
-          {grade.map(item => 
-            <Select.Option value={item.teacher} key={item._id}>{item.teacher}</Select.Option>
+          {examiner.map(item => 
+            <Select.Option value={item.username} key={item._id}>{item.username}</Select.Option>
           )}
         </Select>
       </Form.Item>

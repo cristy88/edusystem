@@ -74,23 +74,23 @@ export const routes = [
         ]
       },
       {
-        path: '/examination',
+        path: '/exam',
         element: <Examination />,
         children: [
           {
-            path: '/examination',
-            element: <Navigate to='/examination/create'></Navigate>
+            path: '/exam',
+            element: <Navigate to='/exam/create' />
           },
           {
-            path: '/examination/create',
+            path: '/exam/create',
             element: <ExaminationCreate />
           },
           {
-            path: '/examination/list',
+            path: '/exam/record',
             element: <ExaminationList />
           },
           {
-            path: '/examination/detail',
+            path: '/exam/invigilate',
             element: <ExaminationDetail />
           }
         ]
