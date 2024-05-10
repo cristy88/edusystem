@@ -1,9 +1,58 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import style from './paperLibrary.module.scss'
-import { Form,Input,Select,Button,Table,Space } from 'antd'
+import { Form,Input,Select,Button,Table,Space, message,Popconfirm } from 'antd'
+import { getPaperListApi,delPaperApi,updatePaperApi } from '../../../../api'
+import SearchForm from '../../../../components/searchForm/SearchForm'
 
 const PaperLibrary = () => {
+  const [messageApi, contextHolder] = message.useMessage()
+  const [paperList,setPaperList] = useState([])
   const [total,setTotal] = useState(0)
+  const [query,setQuery] = useState({page: 1 ,pagesize: 10})
+  const [filterQuery,setFilterQuery] = useState({})
+  const [loading,setLoading] = useState(false)
+  const [time,setTime] = useState(0)
+  const [current,setCurrent] = useState(0)
+
+  const getPaperList = async () =>{
+    setLoading(true)
+    const res = await getPaperListApi({...query, ...filterQuery})
+    setLoading(false)
+    console.log(res)
+    if(res.data.code === 200){
+      setPaperList(res.data.data.list)
+      setTime(res.data.data.list[current].createTime)
+      setTotal(res.data.data.total)
+    } else {
+      messageApi.open({
+        type: 'error',
+        content: res.data.msg
+      })
+    }
+  }
+
+  const del = async id =>{
+    const res = await delPaperApi(id)
+    console.log(res)
+    if(res.data.code === 200){
+      messageApi.open({
+        type: 'success',
+        content: '删除成功'
+      })
+      getPaperList()
+    } else {
+      messageApi.open({
+        type: 'error',
+        content: res.data.msg
+      })
+    }
+  }  
+
+  useEffect(()=>{
+    getPaperList()
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[query,filterQuery])
 
   const columns = [
     {
@@ -23,261 +72,81 @@ const PaperLibrary = () => {
     },
     {
       title: '创建人',
-      dataIndex: 'people',
-      key: 'people',
+      dataIndex: 'creator',
+      key: 'creator',
     },
     {
       title: '创建时间',
-      dataIndex: 'time',
-      key: 'time',
+      dataIndex: 'createTime',
+      key: 'createTime',
     },
     {
       title: '操作',
       key: 'action',
-      render: () =>{
+      render: (_, record) =>{
         return (
-          <Space>
-            <Button>编辑</Button>
-            <Button>删除</Button>
-            <Button>浏览试卷</Button>
-          </Space>
+          <Form>
+            <Space>
+              <Button type="primary" size="small">编辑</Button>
+              <Popconfirm
+                title="警告"
+                description="你确定要删除这条数据m？"
+                onConfirm={() =>{
+                  console.log(record._id)
+                  del(record._id)}}
+                // onCancel={cancel}
+                okText="删除"
+                cancelText="取消"
+              >
+                <Button type="primary" danger size="small">删除</Button>
+              </Popconfirm>
+              <Button size="small">浏览试卷</Button>
+            </Space>
+          </Form>
         )
       }
     },
   ]
 
-  const dataSource = [
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
+  
 
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },{
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-    {
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },{
-      key: 1,
-      name: '153',
-      classify: '213',
-      mark: 153,
-      people: 'wad',
-      time: 4156151,
-    },
-  ]
-
+  // const timestampToTime = (timestamp) =>{
+  //   timestamp = timestamp ? timestamp : null
+  //   let date = new Date(timestamp)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  //   let Y = date.getFullYear() + '-'
+  //   let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+  //   let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
+  //   let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+  //   let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+  //   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  //   return Y + M + D + h + m + s
+  // }
 
   return (
     <div className={style.paperLibrary}>
+      <div className={style.btns}>
+        <Button type="primary"size="small" >新增试卷</Button>
+        <Button type="primary"size="small" >导出excel</Button>
+      </div>
       <div className={style.search}>
-        <div className={style.searchInp}>
-          <Form.Item
-            className={style.papername}
-            name="paper-name" 
-            label="试卷名称" 
-          >
-            <Input placeholder='请输入试卷名称' />
-          </Form.Item>
-          <Form.Item
-            className={style.people}
-            name="people" 
-            label="创建人" 
-
-          >
-            <Select
-              placeholder="创建人"
-              // onChange={handleChange}
-              // options={options}
-            />
-          </Form.Item>
-          <Form.Item
-            className={style.classify}
-            name="classify" 
-            label="考试科目" 
-          >
-            <Select
-              placeholder="考试科目"
-              // onChange={handleChange}
-              // options={options}
-            />
-          </Form.Item>
-        </div>
-        <div className={style.btns}>
-          <Button>重置</Button>
-          <Button>查询</Button>
-        </div>
+        <SearchForm 
+          onSearch={setFilterQuery} />
       </div>
       <div className={style.main}>
         <Table 
-          dataSource={dataSource}  
+          loading={loading}
+          dataSource={paperList}  
           columns={columns} 
+          rowKey={record=>record._id}
           pagination={{
-            current: 1,
-            pageSize: 10,
+            current: query.page,
+            pageSize: query.pagesize,
             pageSizeOptions: [10,20,30,50],
             total,
-            showTotal: (total) => `共${total}条`
+            showTotal: (total) => `共${total}条`,
+            onChange: (page,pagesize) =>{
+              setQuery({ page, pagesize })
+            }
           }}
         />
       </div>

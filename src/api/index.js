@@ -216,3 +216,33 @@ export const examinationRemoveApi = ({id}) => {
 export const getExaminationDetailApi = (id) => {
   return axios.get(`/examination/detail?id=${id}`)
 }
+
+//查询试卷列表/exam/list
+export const getPaperListApi = (params) => {
+  return axios.get('/exam/list', {
+    // header: 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Mzc3NGE3M2JmYzFkZGE1ZDhiZGZjMiIsImlhdCI6MTY4MTM1Nzc4OH0.UNcnEu_Y8F-1XCBUOA-j5VkynKe5uh6Vmum_51EbsxU' 
+    params
+  })
+}
+
+//编辑试卷
+export const updatePaperApi = ({id, name}) => {
+  return axios.post('/exam/update', {
+    id,
+    name
+  })
+}
+
+//删除试卷
+export const delPaperApi = (id) => {
+  return axios.post('/exam/remove', {
+    id
+  })
+}
+
+//查询试卷详情
+export const paperDetailApi = (id) => {
+  return axios.post(`/exam/detail`,{
+    id
+  })
+}

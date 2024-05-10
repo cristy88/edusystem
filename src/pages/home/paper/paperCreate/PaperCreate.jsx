@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import style from './paperCreate.module.scss'
-import { Button, message, Steps, theme , Form, Input ,Select,InputNumber,} from 'antd'
-
+import { Button, message, Steps, Form, Input ,Select,} from 'antd'
+import { paperCreateApi } from '../../../../api'
 
 
 const PaperCreate = () => {
@@ -52,19 +52,9 @@ const PaperCreate = () => {
                 style={{
                   width: '100%',
                 }}
-                placeholder="Tags Mode"
-                // onChange={handleChange}
-                // options={options}
+                placeholder="考试科目"
               />
             </Form.Item>
-            {/* <div>
-              <ul>
-                {
-                  // eslint-disable-next-line react/jsx-key
-                  titles.map((item, index) => <li className={current === index ? "active" : ""} onClick={this.changeCurrent.bind(this,index)} key={item.id}>{item.title}</li>)
-                } 
-              </ul>
-            </div> */}
           </Form>
         </div>,
     },
@@ -82,32 +72,11 @@ const PaperCreate = () => {
     },
   ]
 
-  // const state = {
-  //   tab: [{id: 't1', title: '题库选题'},{id: 't2',title: '随机选题'}],
-  //   tabContents: [
-  //     { 
-  //       id: 'c1',
-  //       content: <div><Button type="primary">选择试题</Button></div>
-  //     },
-  //     {
-  //       id: 'c2',
-  //       content: 
-  //       <div>
-  //         <Form.Item name="questions-count" label="试题数量" >
-  //           <InputNumber min={0}  defaultValue={0}  />
-  //         </Form.Item>
-  //       </div>
-  //     }
-  //   ]
-  // }
-
-  // let titles = this.state.tab
-  // let contents = this.state.tabContents
-
 
   const [paperName,setPaperName] = useState('')
   const [paperRemark,setPaperRemark] = useState('')
   const [current, setCurrent] = useState(0)
+  const [messageApi,contentHolder] = message.useMessage()
   const next = () => {
     setCurrent(current + 1)
   }
@@ -121,6 +90,21 @@ const PaperCreate = () => {
   
   const changeName = (e) => {
     setPaperName(e.target.value)
+    
+  }
+
+  
+
+  const createPaper = async (values) =>{
+    console.log(values)
+    const res = await paperCreateApi(values)
+    if(res.data.code === 200) {
+      messageApi.open({
+        type: 'success',
+        content: '新增成功'
+      })
+
+    }
   }
 
 
@@ -135,7 +119,7 @@ const PaperCreate = () => {
           }}
         >
           {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()}>
+            <Button type="primary" onClick={() => next(setCurrent(current + 1))}>
               下一步
             </Button>
           )}
