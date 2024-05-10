@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { lazy} from 'react'
+import { lazy, Suspense} from 'react'
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 

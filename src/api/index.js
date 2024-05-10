@@ -216,11 +216,6 @@ export const getExamListApi = (() => {
   return axios.get('/exam/list')
 })
 
-// 班级
-export const classApi = (() => {
-  return axios.get('studentGroup/list')
-})
-
 //查询试卷列表/exam/list
 export const getPaperListApi = (params) => {
   return axios.get('/exam/list', {

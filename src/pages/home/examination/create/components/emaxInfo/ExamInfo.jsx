@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { classApi, getClassifyListApi } from '../../../../../../api'
+import { queryClass, getClassifyListApi } from '../../../../../../api'
 import {
   Form,
   Input,
@@ -17,7 +17,7 @@ const ExamInfo = ({formVal}) => {
   const { RangePicker } = DatePicker
 
   const getClass = async () => {
-    const res = await classApi()
+    const res = await queryClass()
     setGrade(res.data.data.list)
   }
 
