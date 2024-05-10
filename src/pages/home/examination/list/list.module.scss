@@ -6,7 +6,7 @@
     flex-wrap: wrap;
     .antCol{
       padding: 0 12px;
-      width: calc(25%);
+      width: calc(100% / 4);
       // flex: 0, 1, auto;
     }
     &:last-child{

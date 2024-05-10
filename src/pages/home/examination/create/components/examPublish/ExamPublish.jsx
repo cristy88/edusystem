@@ -3,7 +3,7 @@ import React from 'react'
 const ExamPublish = () => {
   return (
     <div>
-      <h1>添加试题</h1>
+      <h1>发布考试</h1>
     </div>
   )
 }

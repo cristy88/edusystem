@@ -67,7 +67,7 @@ export const routes = [
       },
       {
         path: '/examination',
-        element: <Examination></Examination>,
+        element: <Examination />,
         children: [
           {
             path: '/examination',
@@ -75,15 +75,15 @@ export const routes = [
           },
           {
             path: '/examination/create',
-            element: <ExaminationCreate></ExaminationCreate>
+            element: <ExaminationCreate />
           },
           {
             path: '/examination/list',
-            element: <ExaminationList></ExaminationList>
+            element: <ExaminationList />
           },
           {
             path: '/examination/detail',
-            element: <ExaminationDetail></ExaminationDetail>
+            element: <ExaminationDetail />
           }
         ]
       }

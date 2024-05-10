@@ -1,5 +1,5 @@
-import React, { useEffect, Suspense, useState } from 'react'
-import { getExaninationListApi } from '../../../../api'
+import React, { useEffect, Suspense, useState, useRef } from 'react'
+// import { getExaninationListApi } from '../../../../api'
 import style from './create.module.scss'
 import {
   Button,
@@ -9,7 +9,9 @@ import {
   Radio,
   Form
 } from 'antd'
+import moment from 'moment'
 import ExamInfo from './components/emaxInfo/ExamInfo'
+import ExamConfig from './components/examConfig/ExamConfig'
 
 const Create = () => {
 
@@ -28,100 +30,57 @@ const Create = () => {
     },
   ]
   const [form] = Form.useForm()
-  const [list, setExamList] = useState([])
   const [current, setCurrent] = useState(0)
   const [formInfo, setFormInfo] = useState({})
-  const [selectionType, setSelectionType] = useState('radio')
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
-  const getExaninationList = async () => {
-    const res = await getExaninationListApi()
-    // console.log('考试记录',res.data.data.list)
-    setExamList(res.data.data.list)
-  }
-
-  useEffect(() => {
-    getExaninationList()
-  }, [])
 
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
   }))
 
-  const next = () => {
-    setCurrent(current + 1)
-  }
-  const prev = () => {
-    setCurrent(current - 1)
-  }
-
+  // 触发表单项的校验
   const formVal = () => {
     // 触发表单项的校验
     form.validateFields()
       .then((values) => {
         setFormInfo(values)
-        next()
+        setCurrent(current + 1)
       })
       .catch((errorInfo) => {
         // 如果校验失败，则捕获错误信息，并提示用户
         // message.error('Please complete the required fields!')
       })
+    console.log('表单数据', formInfo, '科目分类', formInfo.classify)
   }
-  
-  console.log('表单数据', formInfo)
 
-  // 配置试卷数据
-  const columns = [
-    {
-      title: '试卷名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 180
-    },
-    {
-      title: '科目分类',
-      dataIndex: 'classify',
-      key: 'classify',
-      width: 200
-    },
-    {
-      title: '试卷创建人',
-      dataIndex: 'creator',
-      key: 'creator',
-      width: 220
-    },
-    {
-      title: '试卷创建时间',
-      key: 'createTime',
-      dataIndex: 'createTime',
-      width: 300,
-      render: (text) => <p>{new Date().toLocaleString(list.createTime)}</p>,
-    }
-  ]
-  const val = list.filter(v => v.classify === formInfo.classify)
+  useEffect(() => {
+    setSelectedRowKeys([])
+  }, [formInfo.classify])
 
+  // 配置试卷
   const rowSelection = {
-    onChange: (newSelectedRowKeys, selectedRows) => {
-      console.log(newSelectedRowKeys)
-      // setSelectedRowKeys(newSelectedRowKeys)
-      // console.log(`选中行的key: ${newSelectedRowKeys}`, '选中的行: ', selectedRows)
-      // next()
-      
-      // if (selectedRowKeys) {
-      //   // 如果没有选择任何行，则提示用户
-      //   message.error('Please select at least one row!')
-      // } else {
-      //   // 如果有选择的行，则可以进行下一步操作
-      //   // 这里可以添加跳转逻辑，例如使用React Router进行页面跳转
-      //   console.log(selectedRowKeys)
-      //   setSelectedRowKeys(selectedRows)
-      //   console.log(`选中行的key: ${newSelectedRowKeys}`, '选中的行: ', selectedRows)
-      //   next()
-      // }
-    }
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log('选择行: ', selectedRows)
+      setSelectedRowKeys(selectedRowKeys)
+    },
+    selectedRowKeys
   }
 
+  const handleNext = () => {
+    // 确保至少选中一行
+    if (selectedRowKeys.length > 0) {
+      setCurrent(current + 1)
+    } else {
+      // 如果没有选中行，则提示用户
+      alert('请选择其中一套试卷')
+    }
+  }
+  const prev = () => {
+    setCurrent(current - 1)
+  }
+
+  console.log(formInfo)
 
   return (
     <div className={style.create}>
@@ -140,43 +99,19 @@ const Create = () => {
           <ExamInfo formVal={formVal} />
           }
           { steps[current].title === "配置试卷" &&
-            <div  style={{margin: 30}}>
-              <Radio.Group
-                value={selectionType}
-              >
-              </Radio.Group>
-
-              <Table
-                rowSelection={{
-                  type: selectionType,
-                  ...rowSelection,
-                }}
-                columns={columns}
-                dataSource={val}
-              />
-              <div>
-                <Button
-                  style={{
-                    marginRight: '8px',
-                  }}
-                  onClick={() => prev()}
-                >
-                  上一步
-                </Button>
-                <Button type="primary" onClick={() => rowSelection.onChange()}>
-                  下一步
-                </Button>
-              </div>
-            </div>
+          <ExamConfig prev={prev} handleNext={handleNext} rowSelection={rowSelection} formInfo={formInfo}/>
           }
           { steps[current].title === "发布考试" &&
             <div  style={{margin: 30}} className={style.disposition}>
               <h3>配置信息</h3>
-              <p>考试名称：</p>
-              <p>科目分类：</p>
-              <p>监考人员：</p>
-              <p>班级：</p>
-              <p>考试时间：</p>
+              <p>考试名称：{formInfo.name}</p>
+              <p>科目分类：{formInfo.classify}</p>
+              <p>监考人员：{formInfo.examiner}</p>
+              <p>班级：{formInfo.group}</p>
+              <p>考试时间：{formInfo.ExamTime.map(item => 
+                // console.log(item)
+                <span key={item}>{+item.$d ? moment(+item.$d).format('YYYY-MM-DD kk:mm:ss') : '--'} / </span>
+              )}</p>
               <div
                 style={{
                   marginTop: 24,

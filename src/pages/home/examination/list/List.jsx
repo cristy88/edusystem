@@ -9,6 +9,7 @@ import {
   Select,
   DatePicker
 } from 'antd'
+import moment from 'moment'
 
 const List = () => {
   const [list, setList] = useState([])
@@ -44,11 +45,13 @@ const List = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
       title: '状态',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'status',
+      key: 'status',
+      render: (s) =>(s === 1 ? '已结束' : '未结束') 
     },
     {
       title: '监考人',
@@ -63,13 +66,15 @@ const List = () => {
     },
     {
       title: '开始时间',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'startTime',
+      key: 'startTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       key: 'endTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
       title: '设置',
@@ -93,14 +98,6 @@ const List = () => {
   }, [])
 
   const formItemLayout = {
-    // labelCol: {
-    //   xs: {
-    //     span: 24,
-    //   },
-    //   sm: {
-    //     span: 6,
-    //   },
-    // },
     wrapperCol: {
       xs: {
         span: 20,
@@ -126,7 +123,7 @@ const List = () => {
           <div className={style.antCol}>
             <Form.Item
               label="考试名称"
-              name="Input"
+              name="name"
             >
               <Input />
             </Form.Item>
@@ -135,7 +132,7 @@ const List = () => {
           <div className={style.antCol}>
             <Form.Item
               label="科目分类"
-              name="Subject"
+              name="classify"
             >
               <Select placeholder="请选择">
                 <Select.Option value="china">China</Select.Option>
@@ -168,9 +165,9 @@ const List = () => {
               name="status"
             >
               <Select placeholder="请选择">
-                <Select.Option value="china">未开始</Select.Option>
-                <Select.Option value="usa">已结束</Select.Option>
-                <Select.Option value="usa">进行中</Select.Option>
+                <Select.Option value="0">未开始</Select.Option>
+                <Select.Option value="1">已结束</Select.Option>
+                <Select.Option value="2">进行中</Select.Option>
               </Select>
             </Form.Item>
           </div>
@@ -178,7 +175,7 @@ const List = () => {
           <div className={style.antCol}>
             <Form.Item
               label="监考人"
-              name="Invigilator"
+              name="examiner"
             >
               <Input />
             </Form.Item>
@@ -187,7 +184,7 @@ const List = () => {
           <div className={style.antCol}>
             <Form.Item
               label="考试班级"
-              name="ExamClass"
+              name="group"
             >
               <Select placeholder="请选择">
                 <Select.Option value="china">China</Select.Option>
@@ -217,7 +214,7 @@ const List = () => {
           </div>
         </div>
       </Form>
-      <Table columns={columns} dataSource={list} style={{margin: 30}}/>
+      <Table columns={columns} dataSource={list} style={{margin: 20}}/>
     </div>
   )
 }

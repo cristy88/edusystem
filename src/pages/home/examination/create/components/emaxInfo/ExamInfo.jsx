@@ -38,7 +38,7 @@ const ExamInfo = ({formVal}) => {
     <div>
       <Form.Item
         label="考试名称"
-        name="Input"
+        name="name"
         rules={[
           {
             required: true,
@@ -53,8 +53,8 @@ const ExamInfo = ({formVal}) => {
       </Form.Item>
 
       <Form.Item
-        name="ExamTime"
         label="考试时间"
+        name="ExamTime"
         rules={[
           {
             required: true,
@@ -90,7 +90,7 @@ const ExamInfo = ({formVal}) => {
 
       <Form.Item
         label="监考人"
-        name="Invigilator"
+        name="examiner"
         rules={[
           {
             required: true,
@@ -110,7 +110,7 @@ const ExamInfo = ({formVal}) => {
 
       <Form.Item
         label="考试班级"
-        name="ExamClass"
+        name="group"
         rules={[
           {
             required: true,

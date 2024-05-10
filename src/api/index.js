@@ -125,8 +125,8 @@ export const examinationApi = ({studentname, classify, examId, group, examiner, 
 }
 
 // 查询考试列表
-export const getExaninationListApi = () => {
-  return axios.get('/examination/list')
+export const getExaninationListApi = (params) => {
+  return axios.get('/examination/list', {params})
 }
 
 // 编辑考试
