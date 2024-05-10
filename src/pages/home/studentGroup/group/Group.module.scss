@@ -1,32 +1,30 @@
 .box{
   width: 100%;
-  height: 100vh;
-  // margin-left: 256px;
+  height: 100%;
   background: #F0F2F5;
   header{
-    height: 80px;
+    height: 70px;
     background: #ffffff;
-    padding: 10px 0;
+    padding: 6px 0;
     span{
       margin-left: 20px;
       font-size: 14px;
       color: #b5b2b2;
     }
-    h3{
-      margin: 10px 0 0 20px;
+    h4{
+      margin: 6px 0 0 20px;
     }
   }
   section{
     height: 100px;
     width: 96%;
     background: #ffffff;
-    margin: 20px auto;
+    margin: 15px auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
     padding: 12px 0;
     .inp{
-      width: 460px;
+      width: 380px;
       height: 40px;
       display: flex;
       align-items: center;
@@ -35,20 +33,20 @@
         font-size: 14px;
       }  
       input{
-        width: 320px;
+        width: 280px;
         height: 30px;
         border-radius: 0;
       }
-      .tea, .obj{
-        width: 320px;
+      .tea{
+        width: 300px;
         height: 30px;
         border-radius: 0;
       }
     }
     .btn{
-      width: 460px;
+      width: 96%;
       height: 40px;
-      margin: 5px 10px;
+      margin: 5px 0;
       display: flex;
       justify-content: end;
       button{
@@ -56,12 +54,5 @@
         border-radius: 4px;
       }
     }
-  }
-
-  main{
-    width: 96%;
-    height: 440px;
-    background: #ffffff;
-    margin: 20px auto;
   }
 }

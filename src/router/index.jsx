@@ -1,12 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react'
-import { Children } from "react"
-import { Children } from "react"
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 
-import Student from '../pages/student/Student'
-import StudentGroup from '../pages/studentGroup/StudentGroup'
 import { Navigate } from 'react-router-dom'
 import Question from '../pages/home/question/Question'
 import UserManage from '../pages/home/userManage/UserManage'
@@ -24,6 +20,11 @@ const UserManaPerson = lazy(() => import('../pages/home/userManage/userManagePer
 const ExaminationCreate = lazy(() => import(/* webpackChunkName: "examination" */ '../pages/home/examination/create/Create'))
 const ExaminationList = lazy(() => import(/* webpackChunkName: "examinationList" */ '../pages/home/examination/list/List'))
 const ExaminationDetail = lazy(() => import(/* webpackChunkName: "examinationDetail" */ '../pages/home/examination/detail/Detail'))
+
+const StudentGroup = lazy(()=> import('../pages/home/studentGroup/StudentGroup'))
+const Group = lazy(() => import('../pages/home/studentGroup/group/Group'))
+const Student = lazy(() => import('../pages/home/studentGroup/student/Student'))
+
 import PaperCreate from "../pages/paper/paperCreate/PaperCreate"
 import PaperManage from "../pages/paper/paperManage/PaperManage"
 
@@ -93,20 +94,26 @@ export const routes = [
             element: <Suspense fallback={<div>加载中...</div>}><ExaminationDetail></ExaminationDetail></Suspense>
           }
         ]
+      },
+      {
+        path: '/studentGroup',
+        element: <StudentGroup></StudentGroup>,
+        children: [
+          {
+            path: '/studentGroup/group',
+            element: <Group></Group>
+          },
+          {
+            path: '/studentGroup/student',
+            element: <Student></Student>
+          }
+        ]
       }
     ]
   },
   {
     path: '/login',
     element: <Login></Login>
-  },
-  {
-    path: '/studentGroup',
-    element: <StudentGroup></StudentGroup>
-  },
-  {
-    path: '/student',
-    element: <Student></Student>
   },
   {
     path: '/paper/paperCreate',
