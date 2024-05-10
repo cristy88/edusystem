@@ -1,0 +1,16 @@
+.list{
+  width: 100%;
+  height: 100%;
+  .search{
+    display: flex;
+    flex-wrap: wrap;
+    .antCol{
+      padding: 0 12px;
+      width: calc(100% / 4);
+      // flex: 0, 1, auto;
+    }
+    &:last-child{
+      justify-content: flex-end;
+    }
+  }
+}

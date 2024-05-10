@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { getExaninationListApi } from '../../../../api'
-import { Space, Table, Tag } from 'antd'
+import { Space, Table } from 'antd'
+import style from './list.module.scss'
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  DatePicker
+} from 'antd'
+import moment from 'moment'
 
 const List = () => {
   const [list, setList] = useState([])
+  const { RangePicker } = DatePicker
+
   const getExamination = async () => {
     const res = await getExaninationListApi()
     if(res.status === 200) {
       setList(res.data.data.list)
     }
+    console.log(list)
   }
 
 
@@ -21,43 +33,48 @@ const List = () => {
     },
     {
       title: '科目分类',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'classify',
+      key: 'classify',
     },
     {
       title: '创建者',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'creator',
+      key: 'creator',
     },
     {
       title: '创建时间',
-      key: 'tags',
-      dataIndex: 'tags',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
-      title: '时间',
-      dataIndex: 'address',
-      key: 'address',
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (s) =>(s === 1 ? '已结束' : '未结束') 
     },
     {
       title: '监考人',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'examiner',
+      key: 'examiner',
+      
     },
     {
       title: '考试班级',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'group',
+      key: 'group',
     },
     {
       title: '开始时间',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'startTime',
+      key: 'startTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
       title: '结束时间',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'endTime',
+      key: 'endTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--'),
     },
     {
       title: '设置',
@@ -75,46 +92,129 @@ const List = () => {
       key: 'address',
     },
   ]
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ]
-
   
   useEffect(() => {
     getExamination()
   }, [])
 
+  const formItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 20,
+      },
+      sm: {
+        span: 20,
+      },
+    },
+  }
+
   return (
-    <div>
-      {list.map(item => 
-        <div key={item._id}>
-          {item.group}
-          {item.name}
-          {item.examiner}
-          {item.classify}
+    <div className={style.list}>
+      <Form
+        {...formItemLayout}
+        style={{
+          margin: 20,
+          padding: 30 ,
+          background: '#ffffff',
+        }}
+        layout="vertical"
+      >
+        <div className={style.search}>
+          <div className={style.antCol}>
+            <Form.Item
+              label="考试名称"
+              name="name"
+            >
+              <Input />
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="科目分类"
+              name="classify"
+            >
+              <Select placeholder="请选择">
+                <Select.Option value="china">China</Select.Option>
+                <Select.Option value="usa">U.S.A</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="创建者"
+              name="creator"
+            >
+              <Input />
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="创建时间"
+              name="createTime"
+            >
+              <RangePicker placeholder="请选择" showTime format="YYYY-MM-DD HH:mm:ss" />
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="状态"
+              name="status"
+            >
+              <Select placeholder="请选择">
+                <Select.Option value="0">未开始</Select.Option>
+                <Select.Option value="1">已结束</Select.Option>
+                <Select.Option value="2">进行中</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="监考人"
+              name="examiner"
+            >
+              <Input />
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="考试班级"
+              name="group"
+            >
+              <Select placeholder="请选择">
+                <Select.Option value="china">China</Select.Option>
+                <Select.Option value="usa">U.S.A</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+
+          <div className={style.antCol}>
+            <Form.Item
+              label="考试时间"
+              name="examTime"
+            >
+              <RangePicker placeholder="请选择" showTime format="YYYY-MM-DD HH:mm:ss" />
+            </Form.Item>
+          </div>
+          
+          <div className={style.antCol}>
+            <Form.Item>
+              <Button type="default" style={{marginRight: 10}}>
+                重置
+              </Button>
+              <Button type="primary">
+                查询
+              </Button>
+            </Form.Item>
+          </div>
         </div>
-      )}
-      <Table columns={columns} dataSource={data} />
+      </Form>
+      <Table columns={columns} dataSource={list} style={{margin: 20}}/>
     </div>
   )
 }
