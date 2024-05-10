@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from 'antd'
+
 const originData = []
 for (let i = 0; i < 100; i++) {
   originData.push({
