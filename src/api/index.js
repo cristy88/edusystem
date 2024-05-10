@@ -34,11 +34,12 @@ export const createUserApi = ({username, password, status}) => {
 }
 
 // 查询用户列表
-export const selUserListApi = (page = 1, pagesize = 100) => {
+export const selUserListApi = (page = 1, pagesize = 100, obj) => {
   return axios.get('/user/list', {
     params: {
       page,
-      pagesize
+      pagesize,
+      ...obj
     }
   })
 }
@@ -62,8 +63,10 @@ export const getPersonInfoApi = () => {
 
 // 上传头像
 export const toAvatarApi = (avatar) => {
-  return axios.post('/profile', {
-    avatar
+  return axios.post('/profile', avatar, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
   })
 }
 
