@@ -105,7 +105,7 @@ const leftMenu = [
   {
     "key": "64420890551cb461cc300fcc",
     "label": "班级管理",
-    "path": "/studentGroup",
+    "path": "/studentGroup", 
     "disabled": false,
     "__v": 0,
     "icon": <TeamOutlined />,
@@ -114,15 +114,15 @@ const leftMenu = [
         "key": "64464e3f0d97d455218c0122",
         "label": "班级列表",
         "pid": "64420890551cb461cc300fcd",
-        "path": "/studentGroup",
+        "path": "/studentGroup/group",
         "disabled": false,
         "__v": 0
       },
       {
         "key": "64464e3f0d97d455218c0120",
         "label": "学生列表",
-        "pid": "64420890551cb461cc300fcd",
-        "path": "/student",
+        "pid": "64420890551cb461cc300fpd",
+        "path": "/studentGroup/student",
         "disabled": false,
         "__v": 0
       }

@@ -3,8 +3,6 @@ import { lazy, Suspense } from 'react'
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 
-import Student from '../pages/student/Student'
-import StudentGroup from '../pages/studentGroup/StudentGroup'
 import { Navigate } from 'react-router-dom'
 import Question from '../pages/home/question/Question'
 import UserManage from '../pages/home/userManage/UserManage'
@@ -23,6 +21,11 @@ const UserManaPerson = lazy(() => import('../pages/home/userManage/userManagePer
 const ExaminationCreate = lazy(() => import(/* webpackChunkName: "examination" */ '../pages/home/examination/create/Create'))
 const ExaminationList = lazy(() => import(/* webpackChunkName: "examinationList" */ '../pages/home/examination/list/List'))
 const ExaminationDetail = lazy(() => import(/* webpackChunkName: "examinationDetail" */ '../pages/home/examination/detail/Detail'))
+
+const StudentGroup = lazy(()=> import('../pages/home/studentGroup/StudentGroup'))
+const Group = lazy(() => import('../pages/home/studentGroup/group/Group'))
+const Student = lazy(() => import('../pages/home/studentGroup/student/Student'))
+
 
 const PaperCreate = lazy(()=> import(/* webpackChunkName: "paperCreate" */ "../pages/home/paper/paperCreate/PaperCreate"))
 const PaperLibrary = lazy(()=> import(/* webpackChunkName: "paperLibrary" */ '../pages/home/paper/paperLibrary/PaperLibrary'))
@@ -96,6 +99,20 @@ export const routes = [
         ]
       },
       {
+        path: '/studentGroup',
+        element: <StudentGroup></StudentGroup>,
+        children: [
+          {
+            path: '/studentGroup/group',
+            element: <Group></Group>
+          },
+          {
+            path: '/studentGroup/student',
+            element: <Student></Student>
+          }
+        ]
+      },
+      {
         path: '/paper',
         element: <PaperManage />,
         children: [
@@ -115,13 +132,4 @@ export const routes = [
     path: '/login',
     element: <Login></Login>
   },
-  {
-    path: '/studentGroup',
-    element: <StudentGroup></StudentGroup>
-  },
-  {
-    path: '/student',
-    element: <Student></Student>
-  },
-
 ]
