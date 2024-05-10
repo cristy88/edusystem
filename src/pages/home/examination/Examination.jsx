@@ -13,12 +13,12 @@ const Examination = () => {
 
 
   const navChange = () => {
-    if(loaction.pathname === '/examination/create') {
+    if(loaction.pathname === '/exam/create') {
       setNav('创建考试')
-    } else if(loaction.pathname === '/examination/list') {
+    } else if(loaction.pathname === '/exam/record') {
       setNav('考试记录')
-    } else if(loaction.pathname === '/examination/detail') {
-      setNav('查询考试详情')
+    } else if(loaction.pathname === '/exam/invigilate') {
+      setNav('在线监考')
     }
   }
 
