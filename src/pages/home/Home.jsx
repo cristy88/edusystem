@@ -58,7 +58,7 @@ const Home = () => {
             }}
           >
             <Space>
-              <Avatar className={style.avatar}>
+              <Avatar className={style.avatar} src={userInfo?.avator ? <img src={userInfo.avator} alt='avatar' /> : ''}>
                 { userInfo?.username[0] }
               </Avatar>
               {userInfo?.username}

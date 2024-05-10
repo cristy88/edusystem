@@ -3,6 +3,8 @@ import { selUserListApi, createUserApi, updateUserApi, deleteUserApi, getRoleApi
 import style from '../UserManage.module.scss'
 import { Table, Button, Space, Image, Switch, Popconfirm, message, Modal, Select, Form } from 'antd'
 import ChangeUser from '../components/changeUserTable/ChangeUser'
+import SearchForm from '@/components/searchForm/SearchForm'
+
 const { Option } = Select
 const isLR = [
   {'name': '头像', 'nickname': 'avator'},
@@ -14,9 +16,37 @@ const isLR = [
   {'nickname': 'do', 'name': '操作'}
 ]
 
+const searForm = [
+  {
+    type: 'input',
+    label: '账号/姓名',
+    name: 'username',
+    placeholder: '请输入账号'
+  },
+  {
+    type: 'select',
+    label: '启动状态',
+    name: 'status',
+    props: {
+      options: [
+        {
+          label: '启用',
+          value: 1
+        },
+        {
+          label: '禁用',
+          value: 0
+        }
+      ],
+      allowClear: true
+    }
+  }
+]
+
 const UserManageUser = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const [userList, setUserList] = useState([])  //用户列表
+  const [params, setParams] = useState({})  //查询条件
   const [total, setTotal] = useState(-1)   //用户总数
   const [totalPage, setTotalPage] = useState(-1)
   const [page, setPage] = useState(1)  //当前页
@@ -39,7 +69,7 @@ const UserManageUser = () => {
   // 获得用户列表
   const getUserList = async (page, pagesize) => {
     try {
-      const res = await selUserListApi(page, pagesize)
+      const res = await selUserListApi(page, pagesize, {...params})
       // console.log(res.data.data.list)
       setUserList(res.data.data.list)
       setTotal(res.data.data.total)
@@ -158,7 +188,7 @@ const UserManageUser = () => {
   const roleModal = (id, role) => {
     // console.log('点击分配角色', role)
     // console.log('所有角色', trueAllRoles.current)
-    getAllRole()
+    // getAllRole()
     Modal.confirm({
       title: '分配角色',
       centered: true,
@@ -199,12 +229,8 @@ const UserManageUser = () => {
 
   useEffect(() => {
     getUserList(page, pagesize)
-  }, [page, pagesize])
-
-  // useLayoutEffect(() => {
-  //   getAllRole()
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, pagesize, params])
 
   const handleUserEdit = (user) => {
     setUserInfo(user)
@@ -213,6 +239,7 @@ const UserManageUser = () => {
 
   // 列表的列
   useEffect(() => {
+    getAllRole()
     columns.current = isLR.map((v, ind) => {
       const obj = {}
       if (ind === 0) {
@@ -264,11 +291,17 @@ const UserManageUser = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const getSearchForm = (values) => {
+    setPage(1)
+    setParams(values)
+  }
+
   return (
     <div className={style.box}>
       {contextHolder}
       <Button onClick={() => {setUserInfo({}) , setModalOpen(true)}}>添加用户</Button>
       <ChangeUser loadEdit={isEditLoading} showLoad={() => setEditLoaing(true)} userInfo={userInfo} showModalOpen={isModalOpen} updateUser={updateUser} createUser={createUser} closeModal={() => setModalOpen(false)} />
+      <SearchForm tabledata={searForm} getSear={getSearchForm} />
       <Table
         rowKey={record => record['_id']}
         columns={columns.current}
@@ -276,7 +309,9 @@ const UserManageUser = () => {
         scroll={{x: '130%'}}
         pagination={{
           pageSize: pagesize,
+          pageSizeOptions: [5, 10, 20, 50],
           total: total,
+          showTotal: () => `总共${totalPage}条`,
           size: 'small',
           showSizeChanger: true,
           showQuickJumper: true,
