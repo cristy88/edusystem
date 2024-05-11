@@ -4,6 +4,7 @@ import { InboxOutlined } from '@ant-design/icons'
 import * as XSLX from 'xlsx'
 import { createQuesMultApi } from '@/api/questionMagege'
 import SingleAddQues from './components/singleAddQues/SingleAddQues'
+import TestForm from './components/testForm/TestForm'
 const { Dragger } = Upload
 
 const AllPush = () => {
@@ -93,6 +94,11 @@ const AddQuetion = () => {
             label: '批量导入',
             key: '0',
             children: <AllPush />
+          },
+          {
+            label: '测试表格',
+            key: '2',
+            children: <TestForm />
           }
         ]}
       ></Tabs>
