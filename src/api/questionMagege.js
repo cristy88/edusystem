@@ -42,5 +42,15 @@ export const getQuesTypeListApi = (name, value) => {
 
 // 批量创建试题
 export const createQuesMultApi = (obj) => {
-  axios.post('/question/create/multiple', obj)
+  return axios.post('/question/create/multiple', obj)
+}
+
+// 查询科目列表
+export const getClassfiyTypeApi = (page, pagesize) => {
+  return axios.get('/classify/list', {
+    params: {
+      page,
+      pagesize
+    }
+  })
 }

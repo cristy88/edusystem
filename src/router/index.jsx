@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense} from 'react'
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
 
@@ -77,24 +77,24 @@ export const routes = [
         ]
       },
       {
-        path: '/examination',
-        element: <Examination></Examination>,
+        path: '/exam',
+        element: <Examination />,
         children: [
           {
-            path: '/examination',
-            element: <Navigate to='/examination/create'></Navigate>
+            path: '/exam',
+            element: <Navigate to='/exam/create' />
           },
           {
-            path: '/examination/create',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationCreate></ExaminationCreate></Suspense>
+            path: '/exam/create',
+            element: <ExaminationCreate />
           },
           {
-            path: '/examination/list',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationList></ExaminationList></Suspense>
+            path: '/exam/record',
+            element: <ExaminationList />
           },
           {
-            path: '/examination/detail',
-            element: <Suspense fallback={<div>加载中...</div>}><ExaminationDetail></ExaminationDetail></Suspense>
+            path: '/exam/invigilate',
+            element: <ExaminationDetail />
           }
         ]
       },

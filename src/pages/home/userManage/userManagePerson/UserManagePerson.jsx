@@ -4,13 +4,7 @@ import { getUserInfo } from '@/store/modules/user'
 import style from './userMagaPerson.module.scss'
 import { updateInfoApi, toAvatarApi } from '@/api'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { Flex, message, Upload, Button, Modal, Form, Input, Select, InputNumber } from 'antd'
-
-const getBase64 = (img, callback) => {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
+import { Flex, message, Upload, Button, Modal, Form, Input, Select, InputNumber, Image } from 'antd'
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -28,23 +22,14 @@ const UserManagePerson = () => {
   const userInfo = useSelector(s => s.user.userInfo)
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState()
   const [form] = Form.useForm()
   const [isModalOpen, setModalOpen] = useState(false)  //打开对话框
   const [confirmLoading, setConfirmLoading] = useState(false)
-
 
   const handleChange = (info) => {
     if (info.file.status === 'uploading') {
       setLoading(true)
       return
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false)
-        setImageUrl(url)
-      })
     }
   }
 
@@ -68,10 +53,17 @@ const UserManagePerson = () => {
   )
 
   // 上传头像
-  const updateAyatar = async (avatar) => {
+  const updateAyatar = async (avatar, info) => {
     try {
       const res = await toAvatarApi(avatar)
-      console.log('上传头像', res)
+      // console.log('上传头像', res)
+      if (res.data.code === 200) {
+        message.success('上传头像成功')
+        setLoading(false)
+        const url = res.data.data.url
+        updateInfo({avator: url})
+        // setPrevOpen(true)
+      }
     } catch(e) {
       console.log('上传头像', e)
     }
@@ -81,7 +73,7 @@ const UserManagePerson = () => {
   const updateInfo = async (obj) => {
     try {
       const res = await updateInfoApi(obj)
-      console.log('修改用户信息', res)
+      // console.log('修改用户信息', res)
       if (res.data.code === 200) {
         dispatch(getUserInfo())  //获取信息
         setModalOpen(false)
@@ -117,6 +109,12 @@ const UserManagePerson = () => {
       })
   }
 
+  const upAvatar = (info) => {
+    const form = new FormData()
+    form.append('avatar', info.file)
+    updateAyatar(form, info)
+  }
+
   return (
     <div className={style.userInfo}>
       <div className={style.avatar}>
@@ -126,13 +124,13 @@ const UserManagePerson = () => {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action=" https://zyxcl.xyz/exam_api/profile"
             beforeUpload={beforeUpload}
             onChange={handleChange}
+            customRequest={upAvatar}
           >
-            {imageUrl ? (
+            {userInfo.avator ? (
               <img
-                src={imageUrl}
+                src={userInfo.avator}
                 alt="avatar"
                 style={{
                   width: '100%',
