@@ -99,15 +99,15 @@ export const routes = [
         ]
       },
       {
-        path: '/studentGroup',
+        path: '/manage-group',
         element: <StudentGroup></StudentGroup>,
         children: [
           {
-            path: '/studentGroup/group',
+            path: '/manage-group/group-list',
             element: <Group></Group>
           },
           {
-            path: '/studentGroup/student',
+            path: '/manage-group/group-students',
             element: <Student></Student>
           }
         ]

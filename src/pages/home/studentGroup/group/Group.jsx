@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react'
 import style from './Group.module.scss'
 import { Input, Button, Select } from 'antd'
 import Main from '../son/main/Main'
-import {createClass } from '../../../../api' 
 
 const Group = () => {
   const teacherList = [
-    {value: '小松', label: '小松'},
+    {value: '小松', label: '小松'}, 
     {value: '丞丞', label: '丞丞'},
     {value: '虫虫', label: '虫虫'}
   ]
@@ -15,21 +14,21 @@ const Group = () => {
     {value: 'nodejs', label: 'nodejs'},
     {value: 'react', label: 'react'}
   ]
-
+  // 调创建班级接口
   const [list, setList] = useState(false)
-  const [group, setGroup] = useState([])
-  const getClassGroup = async () => {
-    const name = '冲冲冲'
-    const classify = "nodejs"
-    const teacher = "小松"
-    const students = [1, 2]
-    const res = await createClass({name, classify, teacher, students})
-    setGroup(res.config)
-    console.log('班级信息', res.config)
-  }
-  useEffect(() => {
-    getClassGroup()
-  }, [])
+  const [query, setQuery] = useState([])    // 所有班级
+
+
+  // // 调查询接口
+  // const getQueryGroup = async () => {
+  //   const res = await queryClass('scss')
+  //   // setQuery(res)
+  //   // query.value = { name: res.name }
+  //   console.log('查询班级信息', res)
+  // }
+  // useEffect(() => {
+  //   getQueryGroup()
+  // }, [])
 
   // 下拉菜单的内容
   const onChange = (value) => {
@@ -110,7 +109,7 @@ const Group = () => {
           <Button type="link" onClick={changeList}>{list ? '收起' : '展开'}</Button>
         </div>
       </section>
-      <Main teacherList={teacherList} classifyList={classifyList}/>
+      <Main />
     </div>
   )
 }

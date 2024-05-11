@@ -99,8 +99,15 @@ export const createClass = ({name, classify, teacher, students}) => {
 }
 
 // 查询班级
-export const queryClass = () => {
-  return axios.post('/studentGroup/list')
+export const queryClass = ({name}) => {
+  return axios.get(`/studentGroup/list?${name}`)
+}
+
+// 班级列表
+export const ListClass = ({params}) => {
+  return axios.get('/studentGroup/list', {
+    params
+  })
 }
 
 // 编辑班级
@@ -133,7 +140,7 @@ export const createStudent = ({
 
 // 查询学生
 export const queryStudent = () => {
-  return axios.post('/student/list')
+  return axios.get('/student/list')
 }
 
 // 编辑学生
