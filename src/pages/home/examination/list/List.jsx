@@ -10,6 +10,7 @@ import {
   DatePicker
 } from 'antd'
 import moment from 'moment'
+import SearchForm from './components/searchPath/SearchForm'
 
 const List = () => {
   const [list, setList] = useState([])
@@ -18,11 +19,13 @@ const List = () => {
   const getExamination = async () => {
     const res = await getExaninationListApi()
     if(res.status === 200) {
-      setList(res.data.data.list)
+      const newList = res.data.data.list.map(item => ({
+        ...item,
+        'key': item._id
+      }))
+      setList(newList)
     }
-    console.log(list)
   }
-
 
   const columns = [
     {
@@ -110,7 +113,7 @@ const List = () => {
 
   return (
     <div className={style.list}>
-      <Form
+      {/* <Form
         {...formItemLayout}
         style={{
           margin: 20,
@@ -213,8 +216,14 @@ const List = () => {
             </Form.Item>
           </div>
         </div>
-      </Form>
-      <Table columns={columns} dataSource={list} style={{margin: 20}}/>
+      </Form> */}
+      <SearchForm />
+      <div className={style.table}>
+        <p>考试记录</p>
+        <div>
+          <Table columns={columns} dataSource={list} style={{}}/>
+        </div>
+      </div>
     </div>
   )
 }

@@ -154,16 +154,8 @@ export const deleteStudent = ({id}) => {
   })
 }
 // 创建考试
-export const examinationApi = ({studentname, classify, examId, group, examiner, startTime, endTime}) => {
-  return axios.post('/examination/create', {
-    studentname,
-    classify,
-    examId,
-    group,
-    examiner,
-    startTime,
-    endTime
-  })
+export const examinationApi = (params) => {
+  return axios.post('/examination/create', params)
 }
 
 // 查询考试列表
