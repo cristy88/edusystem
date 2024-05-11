@@ -1,8 +1,11 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useRef, useState} from 'react'
 import style from './paperLibrary.module.scss'
 import { Form,Input,Select,Button,Table,Space, message,Popconfirm } from 'antd'
 import { getPaperListApi,delPaperApi,updatePaperApi } from '../../../../api'
 import SearchForm from '../../../../components/searchForm/SearchForm'
+import TablePro from '../../../../components/TablePro/TablePro'
+import moment from 'moment'
+import { NavLink } from 'react-router-dom'
 
 const PaperLibrary = () => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -20,15 +23,11 @@ const PaperLibrary = () => {
     setLoading(false)
     console.log(res)
     if(res.data.code === 200){
+      console.log('res.data.data.list',res.data.data.list)
       setPaperList(res.data.data.list)
-      setTime(res.data.data.list[current].createTime)
-      setTotal(res.data.data.total)
-    } else {
-      messageApi.open({
-        type: 'error',
-        content: res.data.msg
-      })
-    }
+      // setTime(res.data.data.list[current].createTime)
+      // setTotal(res.data.data.total)
+    } 
   }
 
   const del = async id =>{
@@ -50,8 +49,6 @@ const PaperLibrary = () => {
 
   useEffect(()=>{
     getPaperList()
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[query,filterQuery])
 
   const columns = [
@@ -79,6 +76,7 @@ const PaperLibrary = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
+      render: _ => (_ ? moment(_).format('YYYY-MM-DD kk:mm:ss') : '--')
     },
     {
       title: '操作',
@@ -91,9 +89,9 @@ const PaperLibrary = () => {
               <Popconfirm
                 title="警告"
                 description="你确定要删除这条数据m？"
-                onConfirm={() =>{
-                  console.log(record._id)
-                  del(record._id)}}
+                onConfirm={()=>{
+                  del(record._id)
+                }}
                 // onCancel={cancel}
                 okText="删除"
                 cancelText="取消"
@@ -108,37 +106,77 @@ const PaperLibrary = () => {
     },
   ]
 
-  
+  const filterList = [
+    {
+      label: '试卷名称',
+      name: 'name',
+      type: 'input',
+      placeholder: '请输入名称'
+    },
+    {
+      label: '创建人',
+      name: 'creator',
+      type: 'select',
+      placeholder: '请输入姓名'
+    },
+    {
+      label: '考试科目',
+      name: 'classify',
+      type: 'select',
+      placeholder: '请输入科目'
+    },
+  ]
 
-  // const timestampToTime = (timestamp) =>{
-  //   timestamp = timestamp ? timestamp : null
-  //   let date = new Date(timestamp)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-  //   let Y = date.getFullYear() + '-'
-  //   let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-  //   let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
-  //   let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
-  //   let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
-  //   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-  //   return Y + M + D + h + m + s
-  // }
+  //给组件传的参数
+  const tableRef = useRef(null)  
+  const [params,setParams] = useState({})
+
+  useEffect(()=>{
+    tableRef.current.getData()
+    setPaperList()
+  },[params])
 
   return (
     <div className={style.paperLibrary}>
-      <div className={style.btns}>
-        <Button type="primary"size="small" >新增试卷</Button>
-        <Button type="primary"size="small" >导出excel</Button>
-      </div>
-      <div className={style.search}>
-        <SearchForm 
-          onSearch={setFilterQuery} />
-      </div>
+      {/*  */}
       <div className={style.main}>
-        <Table 
+        <div className={style.btns}>
+          <Button type="primary"size="small" to="/paper/create-paper" >
+            <NavLink to={'/paper/create-paper'}>新增试卷</NavLink>
+            
+          </Button>
+          <Button type="primary"size="small" >导出excel</Button>
+        </div>
+        <SearchForm 
+          filterList={filterList}
+          onSearch={(...value)=>{
+            console.log('搜索',value)
+            setParams(...value)
+          }}
+          onReset={(value)=>{
+            console.log('重置',value)
+            setParams(value)
+          }}
+        />
+        <TablePro 
+          ref={tableRef}
+          columns={columns}
+          requsetApi={getPaperListApi}
+          params={params}
+          bordered
+          pageQuery={ {page: 1,pagesize: 10} }
+          paperList={paperList}
+          filterQuery
+        />
+
+        {/* <Table 
           loading={loading}
           dataSource={paperList}  
           columns={columns} 
           rowKey={record=>record._id}
           pagination={{
+            showSizeChanger: true,
+            showQuickJumper: true,
             current: query.page,
             pageSize: query.pagesize,
             pageSizeOptions: [10,20,30,50],
@@ -148,7 +186,7 @@ const PaperLibrary = () => {
               setQuery({ page, pagesize })
             }
           }}
-        />
+        /> */}
       </div>
     </div>
   )

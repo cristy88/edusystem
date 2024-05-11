@@ -100,11 +100,11 @@ export const routes = [
         element: <PaperManage />,
         children: [
           {
-            path: '/paper/paperCreate',
+            path: '/paper/create-paper',
             element: <Suspense fallback={<div>加载中...</div>}><PaperCreate /></Suspense>
           },
           {
-            path: '/paper/paperLibrary',
+            path: '/paper/paper-bank',
             element: <Suspense fallback={<div>加载中...</div>}><PaperLibrary /></Suspense>         
           },
         ]
