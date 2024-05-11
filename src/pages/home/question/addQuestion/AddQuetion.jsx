@@ -1,38 +1,46 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Tabs, message, Upload, Space, Button } from 'antd'
-import { InboxOutlined } from '@ant-design/icons'
-import * as XSLX from 'xlsx'
+import * as XLSX from 'xlsx'
 import { createQuesMultApi } from '@/api/questionMagege'
 import SingleAddQues from './components/singleAddQues/SingleAddQues'
 import TestForm from './components/testForm/TestForm'
-const { Dragger } = Upload
+import {
+  ProForm,
+  ProFormUploadDragger
+} from '@ant-design/pro-components'
+
 
 const AllPush = () => {
   const props = useRef()
+  const [form] = ProForm.useForm()
+  const [d, setD] = useState({list: []})
 
-  const createQuesMult = async () => {
-    const res = await createQuesMultApi()
+  // 批量创造试卷
+  const createQuesMult = async (jsonData) => {
+    const res = await createQuesMultApi(jsonData)
     console.log(res)
   }
 
-  const handleUpload = async (file) => {
-    console.log(file)
+  // 对上传的文件进行处理
+  const handleUpdate = (originfile, trueData) => {
     let resData = []
     // 读取文件
     const fileReader = new FileReader()
-    fileReader.readAsArrayBuffer(file)
+    fileReader.readAsArrayBuffer(originfile)
     fileReader.onload = e => {
       try {
-        const {result} = e.target
-        console.log('result', result)
+        const result = e.target.result
+        // console.log('result', result)
         const formdata = new FormData()
         formdata.append('file', result)
-        console.log('formdata', formdata)
-        const workbook = XSLX.read(result, {type: 'binary'})
-        for(const sheet in workbook.Sheets) {
-          resData = XSLX.utils.sheet_add_json(workbook.Sheets[sheet])
-        }
+        // console.log('formdata', formdata)
+        const workbook = XLSX.read(result, {type: 'binary'})
+        // console.log('workbook', workbook)
+        workbook.SheetNames.forEach(v => {
+          resData.push(XLSX.utils.sheet_to_json(workbook.Sheets[v]))
+        }) 
         console.log('resData1111111111', resData)
+        trueData.list.push(resData)
         // upload(resData)
       } catch(e) {
         console.log('上传文件错误', e)
@@ -40,38 +48,29 @@ const AllPush = () => {
     }
   }
 
-  const propsUpdate = useMemo(() => {
-    return {
-      name: 'file',
-      accept: 'application/vnd.ms-excel',
-      multiple: true,
-      showUploadList: true,
-      beforeUpdate: async (file) => {
-        await handleUpload(file[0])
-        return false
-      },
-      onDrop(e) {
-        console.log('Dropped files', e.dataTransfer.files)
-      },
-    }
-  }, [])
+  const handleSubmit = (value) => {
+    console.log(value)
+    const trueData = {list: []}
+    const originfile = value.dragXlsx[0].originFileObj
+    value.dragXlsx.forEach(v => {
+      handleUpdate(v.originFileObj, trueData)
+    })
+    // handleUpdate(originfile)
+    console.log('展示数据', trueData)
+  }
 
   return (
     <div style={{padding: '20px', background: 'white', margin: '10px 0'}}>
-      <span>上传excel批量导入</span>
-      <Dragger {...propsUpdate}>
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">单击或拖动文件到此区域上传</p>
-        <p className="ant-upload-hint">
-          支持单次或批量上传
-        </p>
-      </Dragger>
-      <Space style={{marginTop: '10px'}}>
-        <Button type="primary">提交</Button>
-        <Button>重置</Button>
-      </Space>
+      <ProForm onFinish={handleSubmit} form={form}>
+        <ProFormUploadDragger
+          name="dragXlsx"
+          label="上传excel批量导入"
+          rules={[{required: true}]}
+          onDrop= {(e) => {
+            console.log('Dropped files', e.dataTransfer.files)
+          }}
+        />
+      </ProForm>
     </div>
   )
 }

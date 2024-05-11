@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import style from './SingleAddQues.module.scss'
 import { Modal, message, Button, Space, Col, Row } from 'antd'
 import { getQuesTypeApi, getClassfiyTypeApi, createQuestionApi } from '@/api/questionMagege'
@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import { ProForm, ProFormSelect, ProFormTextArea, ProFormRadio, ProFormText, ProFormCheckbox } from '@ant-design/pro-components'
 
 const SingleAddQues = () => {
-  const [typeQuestion, setTypeQues] = useState([])
-  const [typeClassify, setTypeClassify] = useState([])
-  const [QType, setQType] = useState(1)
-  const [toQues, setToQues] = useState(false)
-  const form = ProForm.useForm()
+  const [typeQuestion, setTypeQues] = useState([])   //问题列表
+  const [typeClassify, setTypeClassify] = useState([])  //科目列表
+  const [QType, setQType] = useState(1)  //当前试题类型
+  const [toQues, setToQues] = useState(false)  // 是否已经提交
+  const [form] = ProForm.useForm()   //表单实例
   const navigate = useNavigate()
 
   // 获得所有题目类型
@@ -79,7 +79,8 @@ const SingleAddQues = () => {
         Modal.success({
           content: '试题创建成功，可以继续创建下一题',
           onOk() {
-            form.resetField()
+            // console.log(form)
+            form.resetFields()
           }
         })
       } else {
@@ -116,7 +117,7 @@ const SingleAddQues = () => {
         addRes[v] = values[v]
       }
     })
-    console.log('处理后的试题', addRes)
+    // console.log('处理后的试题', addRes)
     createQues(addRes)
   }
 
