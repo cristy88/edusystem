@@ -7,10 +7,12 @@ import {
   Form,
   Input,
   Select,
-  DatePicker
+  DatePicker,
+  ConfigProvider
 } from 'antd'
 import moment from 'moment'
 import SearchForm from './components/searchPath/SearchForm'
+import TablePath from './components/tablePath/TablePath'
 
 const List = () => {
   const [list, setList] = useState([])
@@ -27,12 +29,20 @@ const List = () => {
     }
   }
 
+  console.log('考试记录', list)
+
+  const onDelete = (e) => {
+    // confirm('删除')
+    console.log('删除', e.target.parentNode.parentNode.parentNode)
+    e.target.parentNode.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode.parentNode)
+    return 
+  }
+
   const columns = [
     {
       title: '考试名称',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
     },
     {
       title: '科目分类',
@@ -60,7 +70,6 @@ const List = () => {
       title: '监考人',
       dataIndex: 'examiner',
       key: 'examiner',
-      
     },
     {
       title: '考试班级',
@@ -83,16 +92,22 @@ const List = () => {
       title: '设置',
       key: 'action',
       render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
+        <div>
+          <button style={{fontSize: "12px", marginRight: "20px"}}>预览试卷</button>
+          {record.status === 1 ? <button disabled style={{fontSize: "12px"}}>删除</button> : <button style={{fontSize: "12px"}} onClick={(e) => onDelete(e)}>删除</button>}
+        </div>
+        
       ),
     },
     {
       title: '操作',
       dataIndex: 'address',
       key: 'address',
+      render: (_, record) => (
+        <Space size="middle">
+          {record.status === 1 ? <button style={{fontSize: "12px"}}>成绩分析</button> : <button style={{fontSize: "12px"}}>编辑</button>}
+        </Space>
+      ),
     },
   ]
   
@@ -100,16 +115,16 @@ const List = () => {
     getExamination()
   }, [])
 
-  const formItemLayout = {
-    wrapperCol: {
-      xs: {
-        span: 20,
-      },
-      sm: {
-        span: 20,
-      },
-    },
-  }
+  // const formItemLayout = {
+  //   wrapperCol: {
+  //     xs: {
+  //       span: 20,
+  //     },
+  //     sm: {
+  //       span: 20,
+  //     },
+  //   },
+  // }
 
   return (
     <div className={style.list}>
@@ -221,9 +236,11 @@ const List = () => {
       <div className={style.table}>
         <p>考试记录</p>
         <div>
-          <Table columns={columns} dataSource={list} style={{}}/>
+          {/* <Table columns={columns} dataSource={list}/> */}
+          <TablePath />
         </div>
       </div>
+      
     </div>
   )
 }
