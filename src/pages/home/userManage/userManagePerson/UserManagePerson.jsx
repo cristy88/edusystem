@@ -5,6 +5,7 @@ import style from './userMagaPerson.module.scss'
 import { updateInfoApi, toAvatarApi } from '@/api'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { Flex, message, Upload, Button, Modal, Form, Input, Select, InputNumber, Image } from 'antd'
+import ImgCrop from 'antd-img-crop'
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -115,31 +116,49 @@ const UserManagePerson = () => {
     updateAyatar(form, info)
   }
 
+  const onPreview = async (file) => {
+    let src = file.url
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj)
+        reader.onload = () => resolve(reader.result)
+      })
+    }
+    const image = new Image()
+    image.src = src
+    const imgWindow = window.open(src)
+    imgWindow?.document.write(image.outerHTML)
+  }
+
   return (
     <div className={style.userInfo}>
       <div className={style.avatar}>
         <Flex gap="middle" wrap>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-            customRequest={upAvatar}
-          >
-            {userInfo.avator ? (
-              <img
-                src={userInfo.avator}
-                alt="avatar"
-                style={{
-                  width: '100%',
-                }}
-              />
-            ) : (
-              uploadButton
-            )}
-          </Upload>
+          <ImgCrop rotationsSlider>
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+              onChange={handleChange}
+              customRequest={upAvatar}
+              onPreview={onPreview}
+            >
+              {userInfo.avator ? (
+                <img
+                  src={userInfo.avator}
+                  alt="avatar"
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              ) : (
+                uploadButton
+              )}
+            </Upload>
+          </ImgCrop>
         </Flex>
       </div>
       <div className={style.userCon}>

@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Tabs, message, Upload, Space, Button } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
+import { Tabs, message } from 'antd'
 import * as XLSX from 'xlsx'
 import { createQuesMultApi } from '@/api/questionMagege'
 import SingleAddQues from './components/singleAddQues/SingleAddQues'
-import TestForm from './components/testForm/TestForm'
 import {
   ProForm,
   ProFormUploadDragger
@@ -11,18 +10,20 @@ import {
 
 
 const AllPush = () => {
-  const props = useRef()
   const [form] = ProForm.useForm()
-  const [d, setD] = useState({list: []})
+  const [num, setNum] = useState(0)
+  const [tn, setTn] = useState(-1)
 
-  // 批量创造试卷
-  const createQuesMult = async (jsonData) => {
-    const res = await createQuesMultApi(jsonData)
-    console.log(res)
+  const createAllQues = async (data) => {
+    const res = await createQuesMultApi(data)
+    // console.log('res上传', res)
+    if (res.data.code === 200) {
+      setNum(num => num + 1)
+    }
   }
 
   // 对上传的文件进行处理
-  const handleUpdate = (originfile, trueData) => {
+  const handleUpdate = (originfile) => {
     let resData = []
     // 读取文件
     const fileReader = new FileReader()
@@ -39,8 +40,27 @@ const AllPush = () => {
         workbook.SheetNames.forEach(v => {
           resData.push(XLSX.utils.sheet_to_json(workbook.Sheets[v]))
         }) 
-        console.log('resData1111111111', resData)
-        trueData.list.push(resData)
+        // console.log('resData1111111111', resData)
+        const trueData = {list: []}
+        resData.forEach(arr => {
+          arr.forEach(v => {
+            if (v.type === 4) {
+              v.options = [v.options + '']
+            } else {
+              // console.log(v)
+              v.options = v.options.split(',')
+            }
+            Object.keys(v).map(k => {
+              if (k !== 'options') {
+                v[k] = v[k] + ''
+              }
+            })
+            trueData.list.push(v)
+          })
+        })
+        // console.log('处理后的数据', trueData)
+        // 批量上传试卷
+        createAllQues(trueData)
         // upload(resData)
       } catch(e) {
         console.log('上传文件错误', e)
@@ -48,16 +68,26 @@ const AllPush = () => {
     }
   }
 
-  const handleSubmit = (value) => {
+  // 点击上传
+  const handleSubmit = async (value) => {
     console.log(value)
-    const trueData = {list: []}
-    const originfile = value.dragXlsx[0].originFileObj
+    setTn(value.dragXlsx.length)
+    setNum(0)
     value.dragXlsx.forEach(v => {
-      handleUpdate(v.originFileObj, trueData)
+      handleUpdate(v.originFileObj)
     })
-    // handleUpdate(originfile)
-    console.log('展示数据', trueData)
   }
+
+  useEffect(() => {
+    console.log('num, td', num, tn)
+    if (num === tn) {
+      // console.log('上传成功')
+      message.success('文件上传成功')
+      form.resetFields()
+      setTn(-1)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [num, tn])
 
   return (
     <div style={{padding: '20px', background: 'white', margin: '10px 0'}}>
@@ -93,11 +123,6 @@ const AddQuetion = () => {
             label: '批量导入',
             key: '0',
             children: <AllPush />
-          },
-          {
-            label: '测试表格',
-            key: '2',
-            children: <TestForm />
           }
         ]}
       ></Tabs>
