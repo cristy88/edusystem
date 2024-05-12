@@ -7,11 +7,12 @@ export const createQuestionApi = (quesObj) => {
 }
 
 // 查询题库列表
-export const getQuesListApi = (page, pagesize, question) => {
+export const getQuesListApi = (pageObj, question) => {
   return axios.get('/question/list', {
-    page,
-    pagesize,
-    question
+    params: {
+      ...pageObj,
+      ...question
+    }
   })
 }
 
