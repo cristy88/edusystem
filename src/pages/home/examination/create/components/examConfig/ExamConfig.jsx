@@ -1,30 +1,26 @@
+/* eslint-disable react/prop-types */
 import React, { useState,useEffect } from 'react'
 import { Radio, Table, Button } from 'antd'
 import moment from 'moment'
-import {getExaninationListApi} from '../../../../../../api'
+import { getPaperListApi } from '../../../../../../api'
 
 
-// eslint-disable-next-line react/prop-types
 const ExamConfig = ({prev, handleNext, rowSelection, formInfo}) => {
   const [list, setExamList] = useState([])
   const [val , setVal] = useState([])
   const [params, setParams] = useState({})
 
   const getExaninationList = async () => {
-    // eslint-disable-next-line react/prop-types
-    const newParams = formInfo.classify
-    setParams(newParams)
-    const res = await getExaninationListApi({params})
+    setParams(formInfo.classify)
+    const res = await getPaperListApi({params})
     const examList = res.data.data.list.map((item) => ({
       ...item,
       'key': item._id
     }))
     setExamList(examList)
     // 筛选
-    // eslint-disable-next-line react/prop-types
     const newVal = examList.filter(v => v.classify === formInfo.classify)
     setVal(newVal)
-    console.log('配置数据',newVal)
   }
 
   useEffect(() => {

@@ -5,9 +5,14 @@
   flex-direction: column;
   header{
     height: 80px;
+    padding-left: 30px;
+    padding-top: 10px;
+    flex-shrink: 0;
+    line-height: 40px;
   }
   main{
     flex: 1;
     background: #eeeeee;
+    overflow: auto;
   }
 }

@@ -13,4 +13,22 @@
       justify-content: flex-end;
     }
   }
+  .table{
+    margin: 20px;
+    padding: 20px;
+    background: #ffffff;
+    // overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    p{
+      height: 40px;
+      font-size: 18px;
+    }
+    div{
+      flex: 1;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+  }
 }

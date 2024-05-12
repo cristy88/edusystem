@@ -1,16 +1,12 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import style from './examination.module.scss'
+import style from '../Home.module.scss'
 import { useLocation } from 'react-router-dom'
+import { Breadcrumb } from 'antd'
 
 const Examination = () => {
   const [nav, setNav] = useState('')
   const loaction = useLocation()
-
-  useEffect(() => {
-    navChange()
-  }, [loaction.pathname])
-
 
   const navChange = () => {
     if(loaction.pathname === '/exam/create') {
@@ -21,14 +17,30 @@ const Examination = () => {
       setNav('在线监考')
     }
   }
+  
+  useEffect(() => {
+    navChange()
+  }, [loaction.pathname])
+
 
   return (
-    <div className={style.examination}>
-      <header>
-        <div><NavLink to='/examination' onClick={() => navChange()}>考试管理</NavLink>/{nav}</div>
-        <h4>{nav}</h4>
+    <div className={style.childContent}>
+      <header className={style.top} style={{padding: 15}}>
+        {/* <div><NavLink to='/exam' onClick={() => navChange()}>考试管理</NavLink>/{nav}</div> */}
+        <Breadcrumb
+          style={{fontSize: 16}}
+          items={[
+            {
+              title: <a href="/exam">考试管理</a>,
+            },
+            {
+              title: <span>{nav}</span>
+            }
+          ]}
+        />
+        <h3 style={{lineHeight: "50px"}}>{nav}</h3>
       </header>
-      <main>
+      <main className={style.bottom}>
         <Suspense fallback={<div style={{width: '200px', margin: '10px auto 0'}}></div>}>
           <Outlet />
         </Suspense>

@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { queryClass, getClassifyListApi, selUserListApi } from '../../../../../../api'
 import { Form, Input, DatePicker, Select, Button } from 'antd'
 
-// eslint-disable-next-line react/prop-types
 const ExamInfo = ({formVal}) => {
   
   const [grade, setGrade] = useState([])
@@ -18,7 +18,6 @@ const ExamInfo = ({formVal}) => {
   
   const getExaminer = async () => {
     const res = await selUserListApi()
-    console.log(res)
     setExaminer(res.data.data.list)
   }
 
@@ -36,7 +35,6 @@ const ExamInfo = ({formVal}) => {
   useEffect(() => {
     getClassifyList()
   }, [])
-
 
   return (
     <div>
@@ -69,7 +67,10 @@ const ExamInfo = ({formVal}) => {
           width: 400,
         }}
       >
-        <RangePicker placeholder="请选择" showTime format="YYYY-MM-DD HH:mm:ss" />
+        <RangePicker placeholder="请选择" showTime format="YYYY-MM-DD HH:mm:ss" onChange={(value, dateString) => {
+          console.log('Selected Time: ', value)
+          console.log('Formatted Selected Time: ', dateString)
+        }}/>
       </Form.Item>
 
       <Form.Item
