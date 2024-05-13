@@ -2,87 +2,45 @@ import React,{useState} from 'react'
 import style from './paperCreate.module.scss'
 import { Button, message, Steps, Form, Input ,Select,} from 'antd'
 import { paperCreateApi } from '../../../../api'
+import PaperInfo from './paperSteps/PaperInfo'
 
 
 const PaperCreate = () => {
   const steps = [
     {
       title: '试卷基础信息',
-      content:
-       <div className={style.first}>
-         <Form className={style.form}  layout="vertical" autoComplete="off">
-           <Form.Item
-             className={style.papername}
-             name="paper-name" 
-             label="试卷名称" 
-             labelWrap= 'true'
-             rules={[
-               {
-                 required: true,
-               },
-             ]}>
-             <Input placeholder='请填写试卷名称' />
-           </Form.Item>
-           <Form.Item
-             name="paper-remark" 
-             label="备注" 
-           >
-             <Input.TextArea placeholder='请填写备注' rows={6} />
-           </Form.Item>
-         </Form>
-  
-       </div>,
-    },
-    {
-      title: '选择试卷的方式&科目',
-      content: 
-        <div className={style.second}> 
-          <Form className={style.form}  layout="vertical" autoComplete="off">
-            <Form.Item
-              className={style.papername}
-              name="paper-classify" 
-              label="考试科目" 
-              rules={[
-                {
-                  required: true,
-                },
-              ]}>
-              <Select
-                mode="tags"
-                style={{
-                  width: '100%',
-                }}
-                placeholder="考试科目"
-              />
-            </Form.Item>
-          </Form>
-        </div>,
+      content: '',
     },
     {
       title: '展示试卷基本信息',
-      content: 
-      <div className={style.third}> 
-        <h3>试卷信息</h3>
-        <div className={style.paperInfo}>
-          <div className=''>试卷名称：</div>
-          <div>试卷科目：</div>
-          <div>备注：</div>
-        </div>
-      </div>,
+      content: ''
     },
   ]
 
-
+  const [form] = Form.useForm()
   const [paperName,setPaperName] = useState('')
   const [paperRemark,setPaperRemark] = useState('')
   const [current, setCurrent] = useState(0)
   const [messageApi,contentHolder] = message.useMessage()
-  const next = () => {
-    setCurrent(current + 1)
-  }
+  const [formInfo,setFormInfo] = useState({})
+  // const next = () => {
+  //   setCurrent(current + 1)
+    
+  // }
   const prev = () => {
     setCurrent(current - 1)
   }
+  const formVal = () =>{
+    form.validateFields()
+      .then((values) => {
+        setCurrent(current + 1)
+        console.log('通过',values)
+      }).catch(e=>{
+        console.log('校验失败',e)
+      })
+      
+  } 
+
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
@@ -92,6 +50,7 @@ const PaperCreate = () => {
     setPaperName(e.target.value)
     
   }
+
 
   
 
@@ -111,34 +70,47 @@ const PaperCreate = () => {
   return (
     <div className={style.paperCreate}>
       <div className={style.body}>
-        <Steps current={current} items={items} className={style.header}/>
-        <div className={style.content} >{steps[current].content}</div>
-        <div
-          style={{
-            marginTop: 24,
-          }}
-        >
-          {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next(setCurrent(current + 1))}>
-              下一步
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => message.success('Processing complete!')}>
-              完成
-            </Button>
-          )}
-          {current > 0 && (
-            <Button
-              style={{
-                margin: '0 8px',
-              }}
-              onClick={() => prev()}
-            >
-              上一步
-            </Button>
-          )}
-        </div>
+        <Form form={form}>
+          <Steps current={current} items={items} className={style.header}/>
+          <div className={style.content} >
+            { steps[current].title === '试卷基础信息' && 
+             <PaperInfo formVal={formVal} />
+            }
+            { steps[current].title === '展示试卷基本信息' &&
+            <div  style={{margin: 30}} className={style.disposition}>
+              <div className={style.third}> 
+                <h3>试卷信息</h3>
+                <div className={style.paperInfo}>
+                  <div className=''>试卷名称：</div>
+                  <div>试卷科目：</div>
+                  <div>备注：</div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 24,
+                }}
+              >
+                <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                    完成
+                </Button>
+                <Button
+                  style={{
+                    margin: '0 8px',
+                  }}
+                  onClick={() => prev()}
+                >
+                    上一步
+                </Button>
+              </div>
+            </div>
+            }
+
+
+          </div>
+        </Form>
+
       </div>
     </div>
   )
