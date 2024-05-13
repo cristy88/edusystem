@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
-import { queryClass, getClassifyListApi, selUserListApi } from '../../../../../../api'
+import { getStudentGroup, getClassifyListApi, selUserListApi } from '../../../../../../api'
 import { Form, Input, DatePicker, Select, Button } from 'antd'
 
 const ExamInfo = ({formVal}) => {
@@ -12,7 +12,7 @@ const ExamInfo = ({formVal}) => {
   const { RangePicker } = DatePicker
 
   const getClass = async () => {
-    const res = await queryClass()
+    const res = await getStudentGroup()
     setGrade(res.data.data.list)
   }
   

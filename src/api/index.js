@@ -129,8 +129,7 @@ export const deleteClass = ({id}) => {
 }
 
 // 创建学生
-export const createStudent = ({
-  username, password, sex, age, className, status}) => {
+export const createStudent = ({username, password, sex, age, className, status}) => {
   return axios.post('/student/create', {
     username, 
     password, 
@@ -179,13 +178,13 @@ export const editExaminationApi = ({id, name}) => {
 }
 
 // 删除考试
-export const examinationRemoveApi = ({id}) => {
+export const examinationRemoveApi = (id) => {
   return axios.post('/examination/remove', {id})
 }
 
 // 查询考试详情
 export const getExaminationDetailApi = (id) => {
-  return axios.get(`/examination/detail?id=${id}`)
+  return axios.get('/examination/detail', {id})
 }
 
 // 创建科目
@@ -198,7 +197,7 @@ export const createClassifyApi = ({name, value}) => {
 
 // 查询科目列表
 export const getClassifyListApi = () => {
-  return axios.get('classify/list?page=1&pagesize=10')
+  return axios.get('classify/list')
 }
 
 // 编辑科目
@@ -246,4 +245,9 @@ export const paperDetailApi = (id) => {
   return axios.post(`/exam/detail`,{
     id
   })
+}
+
+// 班级
+export const getStudentGroup = () => {
+  return axios.get('/studentGroup/list')
 }

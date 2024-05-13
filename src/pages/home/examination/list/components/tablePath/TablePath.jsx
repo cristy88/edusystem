@@ -1,109 +1,31 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, Popconfirm, Table, Space, Modal } from 'antd'
-import { getExaninationListApi } from '../../../../../../api'
+import { Button, Form, Input, Popconfirm, Table, Space, Modal, message } from 'antd'
+import { getExaninationListApi, examinationRemoveApi } from '../../../../../../api'
 import moment from 'moment'
-const EditableContext = React.createContext(null)
-const EditableRow = ({ index, ...props }) => {
-  const [form] = Form.useForm()
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
-  )
-}
-const EditableCell = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) => {
-  const [editing, setEditing] = useState(false)
-  const inputRef = useRef(null)
-  const form = useContext(EditableContext)
-  useEffect(() => {
-    if (editing) {
-      inputRef.current?.focus()
-    }
-  }, [editing])
-  const toggleEdit = () => {
-    setEditing(!editing)
-    form.setFieldsValue({
-      [dataIndex]: record[dataIndex],
-    })
-  }
-  const save = async () => {
-    try {
-      const values = await form.validateFields()
-      toggleEdit()
-      handleSave({
-        ...record,
-        ...values,
-      })
-    } catch (errInfo) {
-      console.log('Save failed:', errInfo)
-    }
-  }
-  let childNode = children
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{
-          margin: 0,
-        }}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
-        ]}
-      >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{
-          paddingRight: 24,
-        }}
-        onClick={toggleEdit}
-      >
-        {children}
-      </div>
-    )
-  }
-  return <td {...restProps}>{childNode}</td>
-}
+import style from './tablePath.module.scss'
+
 const TablePath = () => {
   const [list, setList] = useState([])
-
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
-  const handleOk = (key) => {
-    setIsModalOpen(false)
-    handleDelete(key)
-  }
-  const handleCancel = () => {
-    setIsModalOpen(false)
-  }
-
+  const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false) // 控制Modal显示状态
+  const [currentKey, setCurrentKey] = useState('') // 当前要删除的行的key
 
   const getExamination = async () => {
     const res = await getExaninationListApi()
     if(res.status === 200) {
-      const newList = res.data.data.list.map(item => ({
-        ...item,
-        'key': item._id
-      }))
-      setList(newList)
+      setList(res.data.data.list)
+    }
+    console.log(res.data.data.list)
+  }
+
+  const removeExamination = async () => {
+    console.log('删除',currentKey)
+    const res = await examinationRemoveApi(currentKey)
+    if(res.status === 200) {
+      // setList(res.data.data)
+      message.success('删除成功')
+      getExamination()
     }
   }
 
@@ -111,11 +33,20 @@ const TablePath = () => {
     getExamination()
   }, [])
 
+  // 删除行的函数
   const handleDelete = (key) => {
-    console.log('删除',key)
-    const newData = list.filter((item) => item.key !== key)
-    setList(newData)
+    console.log('删除', key)
+    setCurrentKey(key)
+    setVisible(true) // 显示Modal
   }
+  // 确认删除
+  const handleDeleteConfirm = () => {
+    setLoading(true)
+    removeExamination()
+    setVisible(false) // 关闭Modal
+    setLoading(false)
+  }
+
   const defaultColumns = [
     {
       title: '考试名称',
@@ -142,7 +73,12 @@ const TablePath = () => {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: (s) =>(s === 1 ? '已结束' : '未结束') 
+      render: (s) =>{
+        console.log(s)
+        if(s === 1) return <span>已结束</span>
+        if(s === 2) return <span>未开始</span> 
+        if(s === 3) return <span>进行中</span> 
+      }
     },
     {
       title: '监考人',
@@ -171,14 +107,10 @@ const TablePath = () => {
       key: 'action',
       render: (_, record) => (
         <div>
-          <button style={{fontSize: "12px", marginRight: "20px"}}>预览试卷</button>
-          {record.status === 1 ? <button disabled style={{fontSize: "12px"}}>删除</button> : 
-            <div>
-              <Modal title="警告" open={isModalOpen} onOk={() => handleOk(record.key)} onCancel={handleCancel}>
-                <p>确定要删除该记录吗？</p>
-              </Modal>
-              <button style={{fontSize: "12px"}} onClick={() => showModal()}>删除</button>
-            </div>
+          <button className={style.actionBtn}>预览试卷</button>
+          {record.status === 1 ?
+            <button disabled className={style.disabledBtn}>删除</button>
+            : <button className={style.actionBtn} onClick={() => {handleDelete(record._id)}}>删除</button>
           }
         </div>
       ),
@@ -189,52 +121,32 @@ const TablePath = () => {
       key: 'address',
       render: (_, record) => (
         <Space size="middle">
-          {record.status === 1 ? <button style={{fontSize: "12px"}}>成绩分析</button> : <button style={{fontSize: "12px"}}>编辑</button>}
+          {record.status === 1 ? <button className={style.actionBtn}>成绩分析</button> : <button className={style.actionBtn}>编辑</button>}
         </Space>
       ),
     }
   ]
-  const handleSave = (row) => {
-    const newData = [...list]
-    const index = newData.findIndex((item) => row.key === item.key)
-    const item = newData[index]
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    })
-    setList(newData)
-  }
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
-  }
-  const columns = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    }
-  })
+
   return (
     <div>
       <Table
-        components={components}
+        rowKey={record => record._id}
         rowClassName={() => 'editable-row'}
         bordered
         dataSource={list}
-        columns={columns}
+        columns={defaultColumns}
       />
+      <Modal
+        title="警告"
+        open={visible}
+        onOk={handleDeleteConfirm}
+        confirmLoading={loading}
+        onCancel={() => setVisible(false)}
+      >
+        <p>确定要删除该记录吗？</p>
+      </Modal>
     </div>
+    
   )
 }
 export default TablePath

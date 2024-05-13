@@ -15,21 +15,6 @@ import SearchForm from './components/searchPath/SearchForm'
 import TablePath from './components/tablePath/TablePath'
 
 const List = () => {
-  const [list, setList] = useState([])
-  const { RangePicker } = DatePicker
-
-  const getExamination = async () => {
-    const res = await getExaninationListApi()
-    if(res.status === 200) {
-      const newList = res.data.data.list.map(item => ({
-        ...item,
-        'key': item._id
-      }))
-      setList(newList)
-    }
-  }
-
-  console.log('考试记录', list)
 
   const onDelete = (e) => {
     // confirm('删除')
@@ -110,21 +95,6 @@ const List = () => {
       ),
     },
   ]
-  
-  useEffect(() => {
-    getExamination()
-  }, [])
-
-  // const formItemLayout = {
-  //   wrapperCol: {
-  //     xs: {
-  //       span: 20,
-  //     },
-  //     sm: {
-  //       span: 20,
-  //     },
-  //   },
-  // }
 
   return (
     <div className={style.list}>
@@ -235,7 +205,7 @@ const List = () => {
       <SearchForm />
       <div className={style.table}>
         <p>考试记录</p>
-        <div>
+        <div className={style.tableCont}>
           {/* <Table columns={columns} dataSource={list}/> */}
           <TablePath />
         </div>
