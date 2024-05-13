@@ -14,3 +14,27 @@
   border-radius: 3px;
   padding: 3px;
 }
+
+.paper{
+  width: 100%;
+  height: 100%;
+  h1, .classify{
+    padding: 10px;
+    text-align: center;
+  }
+  .classify{
+    font-size: 18px;
+  }
+  .sort{
+    font-size: 16px;
+    font-weight: 600;
+    color: #1890FF;
+    padding: 10px 0;
+  }
+  .question{
+    margin: 15px 0;
+  }
+  .options{
+    margin-right: 15px;
+  }
+}

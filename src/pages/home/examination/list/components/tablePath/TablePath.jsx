@@ -1,29 +1,35 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, Popconfirm, Table, Space, Modal, message } from 'antd'
+import { Button, Form, Input, Popconfirm, Table, Space, Modal, message, Drawer } from 'antd'
 import { getExaninationListApi, examinationRemoveApi } from '../../../../../../api'
 import moment from 'moment'
 import style from './tablePath.module.scss'
+
+const option = ["A", "B", "C", "D"] 
 
 const TablePath = () => {
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false) // 控制Modal显示状态
   const [currentKey, setCurrentKey] = useState('') // 当前要删除的行的key
+  const [open, setOpen] = useState(false) //试卷预览显示状态
+  const [paper, setPaper] = useState([])
+  const [questions,setQuestions] = useState([])
+  const [single, setSingle] = useState([])  // 1
+  const [moreChoice, setMoreChoice] = useState([])  // 2
+  const [judge, setJudge] = useState([])  // 3
+  const [fillGap, setFillGap] = useState([])  // 4
 
   const getExamination = async () => {
     const res = await getExaninationListApi()
     if(res.status === 200) {
       setList(res.data.data.list)
     }
-    console.log(res.data.data.list)
   }
 
   const removeExamination = async () => {
-    console.log('删除',currentKey)
     const res = await examinationRemoveApi(currentKey)
     if(res.status === 200) {
-      // setList(res.data.data)
       message.success('删除成功')
       getExamination()
     }
@@ -35,7 +41,6 @@ const TablePath = () => {
 
   // 删除行的函数
   const handleDelete = (key) => {
-    console.log('删除', key)
     setCurrentKey(key)
     setVisible(true) // 显示Modal
   }
@@ -45,6 +50,23 @@ const TablePath = () => {
     removeExamination()
     setVisible(false) // 关闭Modal
     setLoading(false)
+  }
+
+  // 预览试卷
+  const previewPaper = (id) => {
+    setOpen(true)
+    const res = list.find(item => item._id === id)
+    console.log(res)
+    setPaper(res)
+    setQuestions(res.questionsList)
+    const s = res.questionsList.filter(item => item.type === '1')
+    setSingle(s)
+    const m = res.questionsList.filter(item => item.type === '2')
+    setMoreChoice(m)
+    const j = res.questionsList.filter(item => item.type === '3')
+    setJudge(j)
+    const f = res.questionsList.filter(item => item.type === '4')
+    setFillGap(f)
   }
 
   const defaultColumns = [
@@ -74,7 +96,6 @@ const TablePath = () => {
       dataIndex: 'status',
       key: 'status',
       render: (s) =>{
-        console.log(s)
         if(s === 1) return <span>已结束</span>
         if(s === 2) return <span>未开始</span> 
         if(s === 3) return <span>进行中</span> 
@@ -107,7 +128,7 @@ const TablePath = () => {
       key: 'action',
       render: (_, record) => (
         <div>
-          <button className={style.actionBtn}>预览试卷</button>
+          <button className={style.actionBtn} onClick={() => previewPaper(record._id)}>预览试卷</button>
           {record.status === 1 ?
             <button disabled className={style.disabledBtn}>删除</button>
             : <button className={style.actionBtn} onClick={() => {handleDelete(record._id)}}>删除</button>
@@ -126,15 +147,20 @@ const TablePath = () => {
       ),
     }
   ]
+  // console.log('试卷',paper)
+  // console.log('单选',single)
+  // console.log('多选',moreChoice)
+  // console.log('判断',judge)
+  // console.log('填空',fillGap)
 
   return (
     <div>
       <Table
-        rowKey={record => record._id}
-        rowClassName={() => 'editable-row'}
         bordered
+        rowKey={record => record._id}
         dataSource={list}
         columns={defaultColumns}
+        rowClassName={() => 'editable-row'}
       />
       <Modal
         title="警告"
@@ -145,6 +171,59 @@ const TablePath = () => {
       >
         <p>确定要删除该记录吗？</p>
       </Modal>
+      <Drawer title="试卷预览" size='large' onClose={() => setOpen(false)} open={open}>
+        <div className={style.paper}>
+          <h1>{paper.name}</h1>
+          <p className={style.classify}>科目：{paper.classify}</p>
+          {single.length > 0 && 
+            <div>
+              <p className={style.sort}>单选题</p>
+              {single.map((item, index) => 
+                <div key={item._id}>
+                  <p className={style.question}>{index + 1}、{item.question}</p>
+                  {item.options.map((opt, index) => 
+                    <span className={style.options} key={Math.random()}>{option[index]}.{opt}</span>
+                  )}
+                </div>
+              )}
+            </div>
+          }
+          {moreChoice.length > 0 && 
+            <div>
+              <p className={style.sort}>多选题</p>
+              {moreChoice.map((item, index) => 
+                <div key={item._id}>
+                  <p className={style.question}>{index + 1}、{item.question}</p>
+                  {item.options.map((opt, index) => 
+                    <span className={style.options} key={Math.random()}>{option[index]}.{opt}</span>
+                  )}
+                </div>
+              )}
+            </div>
+          }
+          {judge.length > 0 && 
+            <div>
+              <p className={style.sort}>判断题</p>
+              {judge.map((item, index) => 
+                <div key={item._id}>
+                  <p className={style.question}>{index + 1}、{item.question}</p>
+                  {item.options.map((opt, index) => 
+                    <span className={style.options} key={Math.random()}>{option[index]}.{opt}</span>
+                  )}
+                </div>
+              )}
+            </div>
+          }
+          {fillGap.length > 0 && 
+            <div>
+              <p className={style.sort}>填空题</p>
+              {fillGap.map((item, index) => 
+                <p className={style.question} key={item._id}>{index + 1}、{item.question}</p>
+              )}
+            </div>
+          }
+        </div>
+      </Drawer>
     </div>
     
   )
