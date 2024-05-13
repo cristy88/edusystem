@@ -1,20 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import style from './Student.module.scss'
 import { Input, Button, Select } from 'antd'
 import Stu from '../son/stu/Stu'
+import { studentClass } from '../../../../api/index'
 
 const Student = () => {
-  const sexList = [
-    {value: '女', label: '女'},
-    {value: '男', label: '男'}
-  ]
-  const classList = [
-    {value: 'nodejs 1', label: 'nodejs 1'},
-    {value: 'nodejs 2', label: 'nodejs 2'},
-    {value: 'nodejs 3', label: 'nodejs 3'}
-  ]
-
   const [listS, setListS] = useState(false)
+  const [groupList, setGroupList] = useState({})    // 班级列表
+  const [group, setGroup] = useState([])
+  const [data, setData] = useState([])   // 渲染数据 
+  const [sexOptions, setSexOptions] = useState([])
+  const [classNameOptions, setClassNameOptions] = useState([])
+
+  // 学生列表接口
+  const getStudentList = async () => {
+    const res = await studentClass({...group, ...groupList})
+    if (res.data.code === 200) {
+      setData(res.data.data.list)
+      const sexs = new Set(res.data.data.list.map(item => item.sex))
+      const classNames = new Set(res.data.data.list.map(item => item.className))
+      setSexOptions(Array.from(sexs).map(sex => (
+        <Select.Option key={sex} value={sex}>
+          {sex}
+        </Select.Option>
+      )))
+      setClassNameOptions(Array.from(classNames).map(className => (
+        <Select.Option key={className} value={className}>
+          {className}
+        </Select.Option>
+      )))
+    }
+    console.log('学生信息', res.data.data.list)
+  }
+  useEffect(() => { 
+    getStudentList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [group, groupList])
 
   const changeList = () => {
     setListS(!listS)
@@ -60,14 +81,16 @@ const Student = () => {
           <p>性别：</p>
           <Select 
             className={style.tea} 
-            showSearch placeholder="请选择"
+            showSearch 
+            placeholder="请选择"
             optionFilterProp="children"
             value={sexValue}
             onChange={(value) => setSexValue(value)}
             onSearch={onSearch}
             filterOption={filterOption}
-            options={sexList}
-          /> 
+          >
+            {sexOptions}
+          </Select>
         </div>
         { listS && 
           <>
@@ -81,8 +104,9 @@ const Student = () => {
                 onChange={(value) => setClassValue(value)}
                 onSearch={onSearch}
                 filterOption={filterOption}
-                options={classList}
-              />
+              >
+                {classNameOptions}
+              </Select>
             </div> 
           </>          
         }
