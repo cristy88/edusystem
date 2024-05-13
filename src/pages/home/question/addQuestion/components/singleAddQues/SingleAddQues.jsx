@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useMemo, useState } from 'react'
 import style from './SingleAddQues.module.scss'
 import { Modal, message, Button, Space, Col, Row } from 'antd'
@@ -5,69 +6,12 @@ import { getQuesTypeApi, getClassfiyTypeApi, createQuestionApi } from '@/api/que
 import { useNavigate } from 'react-router-dom'
 import { ProForm, ProFormSelect, ProFormTextArea, ProFormRadio, ProFormText, ProFormCheckbox } from '@ant-design/pro-components'
 
-const SingleAddQues = () => {
-  const [typeQuestion, setTypeQues] = useState([])   //问题列表
-  const [typeClassify, setTypeClassify] = useState([])  //科目列表
+const SingleAddQues = (props) => {
+  const { trueQuesType, trueClassify } = props   //题目类型列表
   const [QType, setQType] = useState(1)  //当前试题类型
   const [toQues, setToQues] = useState(false)  // 是否已经提交
   const [form] = ProForm.useForm()   //表单实例
   const navigate = useNavigate()
-
-  // 获得所有题目类型
-  const getQuesType = async () => {
-    try {
-      const res = await getQuesTypeApi()
-      // console.log('所有试题类型', res)
-      if (res.data.code === 200) {
-        setTypeQues(res.data.data.list)
-      } else {
-        message.error(res.data.msg)
-      }
-    } catch (e) {
-      console.log('所有试题类型', e)
-    }
-  }
-
-  // 获得所有科目类型
-  const getClassfiyType = async () => {
-    try {
-      const res = await getClassfiyTypeApi()
-      // console.log('科目类别', res.data.data.list)
-      if (res.data.code === 200) {
-        setTypeClassify(res.data.data.list)
-      } else {
-        message.error(res.data.msg)
-      }
-    } catch(e) {
-      console.log('科目类别', e)
-    }
-  }
-
-  // 对题目类型进行处理
-  const trueQuesType = useMemo(() => {
-    return typeQuestion.map(v => {
-      return {
-        value: v.value,
-        label: v.name,
-        key: v['_id']
-      }
-    })
-  }, [typeQuestion])
-
-  // 对科目数据进行去重,处理
-  const trueClassify = useMemo(() => {
-    const trueC = []
-    typeClassify.forEach(v => {
-      if (!trueC.find(x => x.label === v.name)) {
-        trueC.push({
-          value: v.value,
-          label: v.name,
-          key: v['_id']
-        })
-      }
-    })
-    return trueC
-  }, [typeClassify])
 
   // 创建试题
   const createQues = async (obj) => {
@@ -120,11 +64,6 @@ const SingleAddQues = () => {
     // console.log('处理后的试题', addRes)
     createQues(addRes)
   }
-
-  useEffect(() => {
-    getQuesType()
-    getClassfiyType()
-  }, [])
 
   // 多选框的校验，至少要有两个被选中
   const validateTwoOptions = (rule, value) => {

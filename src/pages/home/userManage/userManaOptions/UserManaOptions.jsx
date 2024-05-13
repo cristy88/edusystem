@@ -12,7 +12,15 @@ for (let i = 0; i < 100; i++) {
   })
 }
 
-const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
+const EditableCell = ({ 
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />
   return (
     <td {...restProps}>
