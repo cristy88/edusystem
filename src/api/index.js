@@ -125,6 +125,13 @@ export const deleteClass = ({id}) => {
   })
 }
 
+// 班级列表
+export const studentClass = ({params}) => {
+  return axios.get('/student/list', {
+    params
+  })
+}
+
 // 创建学生
 export const createStudent = ({
   username, password, sex, age, className, status}) => {

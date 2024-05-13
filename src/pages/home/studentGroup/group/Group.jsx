@@ -2,33 +2,40 @@ import React, { useState, useEffect } from 'react'
 import style from './Group.module.scss'
 import { Input, Button, Select } from 'antd'
 import Main from '../son/main/Main'
+import { ListClass } from '../../../../api'
 
 const Group = () => {
-  const teacherList = [
-    {value: '小松', label: '小松'}, 
-    {value: '丞丞', label: '丞丞'},
-    {value: '虫虫', label: '虫虫'}
-  ]
-  const classifyList = [
-    {value: 'vue', label: 'vue'},
-    {value: 'nodejs', label: 'nodejs'},
-    {value: 'react', label: 'react'}
-  ]
-  // 调创建班级接口
+  const [groupList, setGroupList] = useState({})    // 班级列表
+  const [data, setData] = useState([])
+  const [teacherOptions, setTeacherOptions] = useState([])
+  const [classifyOptions, setClassifyOptions] = useState([])
+
+  // 班级列表接口
+  const getClassList = async () => {
+    const res = await ListClass({...groupList})
+    if (res.data.code === 200) {
+      setData(res.data.data.list)
+      const teachers = new Set(res.data.data.list.map(item => item.teacher))
+      const classifys = new Set(res.data.data.list.map(item => item.classify))
+      setTeacherOptions(Array.from(teachers).map(teacher => (
+        <Select.Option key={teacher} value={teacher}>
+          {teacher}
+        </Select.Option>
+      )))
+      setClassifyOptions(Array.from(classifys).map(classify => (
+        <Select.Option key={classify} value={classify}>
+          {classify}
+        </Select.Option>
+      )))
+    }
+    console.log('班级信息', res.data.data.list)
+  }
+  useEffect(() => { 
+    getClassList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupList])
+
   const [list, setList] = useState(false)
-  const [query, setQuery] = useState([])    // 所有班级
-
-
-  // // 调查询接口
-  // const getQueryGroup = async () => {
-  //   const res = await queryClass('scss')
-  //   // setQuery(res)
-  //   // query.value = { name: res.name }
-  //   console.log('查询班级信息', res)
-  // }
-  // useEffect(() => {
-  //   getQueryGroup()
-  // }, [])
 
   // 下拉菜单的内容
   const onChange = (value) => {
@@ -82,8 +89,9 @@ const Group = () => {
             onChange={(value) => setTeacherValue(value)}
             onSearch={onSearch}
             filterOption={filterOption}
-            options={teacherList}
-          />
+          >
+            {teacherOptions}
+          </Select>
         </div>
         { list && 
           <div>
@@ -98,8 +106,9 @@ const Group = () => {
                 onChange={(value) => setSelectValue(value)}
                 onSearch={onSearch}
                 filterOption={filterOption}
-                options={classifyList}
-              />
+              >
+                {classifyOptions}
+              </Select>
             </div> 
           </div>
         }
