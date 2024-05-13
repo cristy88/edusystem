@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux'
 
 const PaperManage = () => {
   const paper = useSelector(s=>s.paper)
-
-  console.log(paper)
   return (
     <div className={style.paperManage}>
       <header >试卷管理</header>
