@@ -71,8 +71,12 @@ export const toAvatarApi = (avatar) => {
 }
 
 //创建试卷
-export const paperCreateApi = () =>{
-  return axios.post('/exam/create')
+export const paperCreateApi = (name,classify,questions,date) =>{
+  return axios.post(`/exam/create?${date}`,{
+    name,
+    classify,
+    questions,
+  })
 }
 
 
